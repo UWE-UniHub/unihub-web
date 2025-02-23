@@ -1,12 +1,11 @@
 import {createBrowserRouter, RouteObject} from "react-router";
-import {PageType} from "./types/PageType.ts";
 import {LayoutWrapper} from "./components/LayoutWrapper/LayoutWrapper.tsx";
 import {FeedPage} from "./pages/FeedPage/FeedPage.ts";
+import {FC} from "react";
 
-const path = (path: string, Page: PageType): RouteObject => ({
+const path = (path: string, Page: FC): RouteObject => ({
     path,
     element: <Page />,
-    loader: Page.loader
 })
 
 export const router = createBrowserRouter([

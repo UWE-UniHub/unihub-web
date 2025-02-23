@@ -1,5 +1,5 @@
-import {PageType} from "../../types/PageType.ts";
+import {FC} from "react";
 
-export const FeedPage: PageType = () => {
+export const FeedPage: FC = () => {
     return 'hi mom';
 }

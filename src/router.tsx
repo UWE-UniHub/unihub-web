@@ -1,4 +1,4 @@
-import {createBrowserRouter, RouteObject} from "react-router";
+import {createBrowserRouter, Navigate, RouteObject} from "react-router";
 import {LayoutWrapper} from "./components/LayoutWrapper/LayoutWrapper.tsx";
 import {FeedPage} from "./pages/FeedPage/FeedPage.ts";
 import {FC} from "react";
@@ -12,7 +12,15 @@ export const router = createBrowserRouter([
     {
         element: <LayoutWrapper />,
         children: [
-            path('/', FeedPage)
+            path('/', FeedPage),
+            {
+                path: '/login',
+                element: <Navigate to="/" state={{ modal: 'login' }} />
+            },
+            {
+                path: '/signup',
+                element: <Navigate to="/" state={{ modal: 'signup' }} />
+            }
         ]
     }
 ])

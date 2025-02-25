@@ -9,6 +9,16 @@
  * ---------------------------------------------------------------
  */
 
+export interface SignupPost {
+  id: number;
+  first_name: string;
+  last_name: string;
+  is_staff?: boolean;
+  student: ProfileStudentInfo | null;
+  staff: ProfileStaffInfo | null;
+  password: string;
+}
+
 export interface ProfileStudentInfo {
   program: string;
   level: string;
@@ -33,7 +43,7 @@ export interface Profile {
 }
 
 export interface ProfilePost {
-  id: number;
+  id: string;
   first_name: string;
   last_name: string;
   is_staff?: boolean;
@@ -93,7 +103,7 @@ export interface PostPatch {
 export interface Event {
   /** @format uuid */
   id: string;
-  description?: string;
+  description: string;
   location: string;
   /** @format date-time */
   created_at: string;
@@ -103,7 +113,7 @@ export interface Event {
 }
 
 export interface EventPost {
-  description?: string;
+  description: string;
   location: string;
   /** @format date-time */
   date: string;

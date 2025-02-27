@@ -1,17 +1,21 @@
-import {FC, useEffect} from "react";
-import {Avatar, Button, Flex, Layout, Menu, Popover, theme, Typography} from "antd";
+import {FC, useCallback, useEffect, useMemo, useState} from "react";
+import {App, Avatar, Button, Flex, Layout, Menu, Popover, theme, Typography} from "antd";
 import styles from './LayoutWrapper.module.css';
 import {LoginOutlined, LogoutOutlined, TeamOutlined, UserOutlined} from "@ant-design/icons";
 import {Link, Outlet} from "react-router";
 import {stringToColor} from "../../utils/stringToColor.ts";
 import {useOwnProfile} from "../../stores/OwnProfileStore.ts";
 import {authGet} from "../../api/auth/authGet.ts";
+import {AuthModal, AuthModalState} from "../AuthModal/AuthModal.tsx";
+import {AuthModalProvider} from "./useAuthModal.ts";
+import {authDelete} from "../../api/auth/authDelete.ts";
 
 export const LayoutWrapper: FC = () => {
     const { token } = theme.useToken();
     const { profile, setProfile } = useOwnProfile();
+    const { message } = App.useApp();
 
-    useEffect(() => {
+    const checkAuth = useCallback(() => {
         if(!profile) {
             authGet().then((payload) => {
                 if(payload) {
@@ -20,6 +24,27 @@ export const LayoutWrapper: FC = () => {
             });
         }
     }, [profile]);
+
+    useEffect(() => {
+        checkAuth();
+    }, [profile]);
+
+    const handleLogout = () => {
+        authDelete().then(() => setProfile(null));
+    }
+
+    const [authModalState, setAuthModalState] = useState<AuthModalState>(null);
+    const authModalContext = useMemo(() => ({
+        openModal: (state: AuthModalState) => {
+            if(profile) {
+                void message.info('You are already logged in');
+                return;
+            }
+
+            setAuthModalState(state);
+        },
+        checkAuth
+    }), [profile, checkAuth]);
 
     return (
         <Layout>
@@ -63,17 +88,19 @@ export const LayoutWrapper: FC = () => {
                                     danger
                                     block
                                     icon={<LogoutOutlined />}
-                                    onClick={() => {}}
+                                    onClick={handleLogout}
                                 >Log out</Button>
                             </Flex>
                         )}
                     >
                         <Button type="text">
                             <Flex align="center" gap={8}>
-                                <Avatar style={{ backgroundColor: stringToColor(`JD`) }}>
-                                    JD
+                                <Avatar style={{ backgroundColor: stringToColor(`${profile.first_name[0]}${profile.last_name[0]}`) }}>
+                                    {profile.first_name[0]}{profile.last_name[0]}
                                 </Avatar>
-                                <Typography.Text style={{ color: token.colorTextLightSolid }}>John Doe</Typography.Text>
+                                <Typography.Text style={{ color: token.colorTextLightSolid }}>
+                                    {profile.first_name} {profile.last_name}
+                                </Typography.Text>
                             </Flex>
                         </Button>
                     </Popover>
@@ -82,13 +109,20 @@ export const LayoutWrapper: FC = () => {
                         type="primary"
                         size="large"
                         icon={<LoginOutlined />}
+                        onClick={() => setAuthModalState('login')}
                     >
                         Login
                     </Button>
                 )}
             </Layout.Header>
             <Layout.Content className={styles.content}>
-                <Outlet />
+                <AuthModalProvider value={authModalContext}>
+                    <Outlet />
+                    <AuthModal
+                        state={authModalState}
+                        onStateChange={setAuthModalState}
+                    />
+                </AuthModalProvider>
             </Layout.Content>
         </Layout>
     )

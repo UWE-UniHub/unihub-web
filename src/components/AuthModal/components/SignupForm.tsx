@@ -87,13 +87,7 @@ export const SignupForm: FC<Props> = ({ form, onFinish }) => {
                         label="Department"
                         rules={[{ type: "string", required: true, whitespace: true }]}
                     >
-                        <Select>
-                            {departmentsData?.map((dep: string) => (
-                                <Select.Option key={dep} value={dep}>
-                                    {dep}
-                                </Select.Option>
-                            ))}
-                        </Select>
+                        <Select options={departmentsData?.departments.map((dep) => ({ value: dep, label: dep }))}  />
                     </Form.Item>
                 </>
             ) : (
@@ -110,26 +104,14 @@ export const SignupForm: FC<Props> = ({ form, onFinish }) => {
                         label="Level"
                         rules={[{ type: "string", required: true, whitespace: true }]}
                     >
-                        <Select>
-                            {levelsData?.map((lvl: string) => (
-                                <Select.Option key={lvl} value={lvl}>
-                                    {lvl}
-                                </Select.Option>
-                            ))}
-                        </Select>
+                        <Select options={levelsData?.levels.map((lvl) => ({ value: lvl, label: lvl }))}  />
                     </Form.Item>
                     <Form.Item<SignupFormType>
                         name={['student', 'school']}
                         label="School"
                         rules={[{ type: "string", required: true, whitespace: true }]}
                     >
-                        <Select>
-                            {schoolsData?.map((sch: string) => (
-                                <Select.Option key={sch} value={sch}>
-                                    {sch}
-                                </Select.Option>
-                            ))}
-                        </Select>
+                        <Select options={schoolsData?.schools.map((sch) => ({ value: sch, label: sch }))}  />
                     </Form.Item>
                 </>
             )}

@@ -1,8 +1,11 @@
 import {FC} from "react";
-import {Flex, Form, FormInstance, FormProps, Input, InputNumber} from "antd";
+import {Flex, Form, FormInstance, FormProps, Input, InputNumber, Select} from "antd";
 import {SignupPost} from "../../../types/domain.ts";
 import {COMMON_FORM_PROPS} from "../constants.ts";
 import {ProfileTypeSegmented} from "./ProfileTypeSegmented.tsx";
+import { useLevels } from "../../../queries/useLevels.ts";
+import { useSchools } from "../../../queries/useSchools";
+import { useDepartments } from "../../../queries/useDepartments";
 
 export type SignupFormType = SignupPost & {
     repeat_password: string;
@@ -15,6 +18,10 @@ type Props = {
 
 export const SignupForm: FC<Props> = ({ form, onFinish }) => {
     const isStaff = Form.useWatch('is_staff', form);
+
+    const { data: levelsData} = useLevels();
+    const { data: schoolsData} = useSchools();
+    const { data: departmentsData} = useDepartments();
 
     return (
         <Form<SignupFormType>
@@ -80,7 +87,13 @@ export const SignupForm: FC<Props> = ({ form, onFinish }) => {
                         label="Department"
                         rules={[{ type: "string", required: true, whitespace: true }]}
                     >
-                        <Input />
+                        <Select>
+                            {departmentsData?.map((dep: string) => (
+                                <Select.Option key={dep} value={dep}>
+                                    {dep}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </Form.Item>
                 </>
             ) : (
@@ -97,14 +110,26 @@ export const SignupForm: FC<Props> = ({ form, onFinish }) => {
                         label="Level"
                         rules={[{ type: "string", required: true, whitespace: true }]}
                     >
-                        <Input />
+                        <Select>
+                            {levelsData?.map((lvl: string) => (
+                                <Select.Option key={lvl} value={lvl}>
+                                    {lvl}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </Form.Item>
                     <Form.Item<SignupFormType>
                         name={['student', 'school']}
                         label="School"
                         rules={[{ type: "string", required: true, whitespace: true }]}
                     >
-                        <Input />
+                        <Select>
+                            {schoolsData?.map((sch: string) => (
+                                <Select.Option key={sch} value={sch}>
+                                    {sch}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </Form.Item>
                 </>
             )}

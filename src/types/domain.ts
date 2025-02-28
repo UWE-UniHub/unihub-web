@@ -11,12 +11,12 @@
 
 export interface SignupPost {
   id: number;
+  password: string;
   first_name: string;
   last_name: string;
-  is_staff?: boolean;
+  is_staff: boolean;
   student: ProfileStudentInfo | null;
   staff: ProfileStaffInfo | null;
-  password: string;
 }
 
 export interface ProfileStudentInfo {
@@ -42,16 +42,6 @@ export interface Profile {
   staff: ProfileStaffInfo | null;
 }
 
-export interface ProfilePost {
-  id: string;
-  first_name: string;
-  last_name: string;
-  is_staff?: boolean;
-  bio: string | null;
-  student: ProfileStudentInfo | null;
-  staff: ProfileStaffInfo | null;
-}
-
 export interface ProfilePatch {
   first_name?: string;
   last_name?: string;
@@ -67,6 +57,7 @@ export interface Community {
 }
 
 export interface CommunityPost {
+  id: string;
   name: string;
   bio: string | null;
 }
@@ -84,14 +75,14 @@ export interface Post {
   created_at: string;
   /** @format uuid */
   event_id: string | null;
-  creator: Profile | Community;
+  profile: Profile;
+  community: Community | null;
 }
 
 export interface PostPost {
   content: string;
   /** @format uuid */
   event_id: string | null;
-  creator: Profile | Community;
 }
 
 export interface PostPatch {
@@ -109,7 +100,8 @@ export interface Event {
   created_at: string;
   /** @format date-time */
   date: string;
-  creator: Profile | Community;
+  profile: Profile;
+  community: Community | null;
 }
 
 export interface EventPost {
@@ -117,7 +109,6 @@ export interface EventPost {
   location: string;
   /** @format date-time */
   date: string;
-  creator: Profile | Community;
 }
 
 export interface EventPatch {
@@ -128,6 +119,18 @@ export interface EventPatch {
 }
 
 export interface LoginPost {
-  id?: number;
-  password?: string;
+  id: number;
+  password: string;
+}
+
+export interface Levels {
+  levels: string[];
+}
+
+export interface Schools {
+  schools: string[];
+}
+
+export interface Departments {
+  departments: string[];
 }

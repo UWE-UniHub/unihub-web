@@ -1,0 +1,7 @@
+.cardItem {
+    flex: 1 0;
+}
+
+.cardItemBody {
+    padding: 16px !important;
+}

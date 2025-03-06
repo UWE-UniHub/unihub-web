@@ -1,0 +1,12 @@
+.container {
+    border: 0;
+    background: none;
+}
+
+.text {
+    margin-top: 8px;
+}
+
+.image {
+    width: 100%;
+}

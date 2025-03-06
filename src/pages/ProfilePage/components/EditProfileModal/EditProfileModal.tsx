@@ -20,16 +20,18 @@ export const EditProfileModal: FC = () => {
     const [form] = Form.useForm();
 
     const [avatarLoading, setAvatarLoading] = useState(false);
-    const handleAvatarUpload: UploadProps['action'] = async (file) => {
+    const handleAvatarUpload: UploadProps['beforeUpload'] = async (file) => {
         setAvatarLoading(true);
-        profilesProfileIdAvatarPut(profile!.id, await bufferToBase64(await file.bytes())).then(() => {
+        console.log(file);
+        void profilesProfileIdAvatarPut(profile!.id, await bufferToBase64(file)).then(() => {
             void message.success('Success');
             checkAuth();
         }).catch((e) => {
             console.error(e);
             void message.error(`Error (${JSON.stringify(e)})`);
-        }).finally(() => setAvatarLoading(false))
-        return '';
+        }).finally(() => setAvatarLoading(false));
+
+        return false;
     }
     const handleAvatarDelete = () => {
         profilesProfileIdAvatarDelete(profile!.id).then(() => {
@@ -90,8 +92,7 @@ export const EditProfileModal: FC = () => {
                             listType="picture-circle"
                             showUploadList={false}
                             maxCount={1}
-                            beforeUpload={() => true}
-                            action={handleAvatarUpload}
+                            beforeUpload={handleAvatarUpload}
                         >
                             <AvatarUploadContent
                                 url={profile?.id ? getProfileAvatarUrl(profile.id) : undefined}

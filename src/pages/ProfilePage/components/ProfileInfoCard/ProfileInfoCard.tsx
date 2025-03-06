@@ -7,9 +7,10 @@ import {EditProfileModal} from "../EditProfileModal/EditProfileModal.tsx";
 
 type Props = {
     profile: Profile;
+    onProfileUpdate: VoidFunction;
 }
 
-export const ProfileInfoCard: FC<Props> = ({ profile }) => {
+export const ProfileInfoCard: FC<Props> = ({ profile, onProfileUpdate }) => {
     const { profile: ownProfile } = useOwnProfile();
     const isOwnProfile = profile.id === ownProfile?.id;
 
@@ -33,7 +34,7 @@ export const ProfileInfoCard: FC<Props> = ({ profile }) => {
                         </Flex>
                     </Flex>
                 </Flex>
-                {isOwnProfile ? <EditProfileModal /> : <Button type="primary" block >Subscribe</Button>}
+                {isOwnProfile ? <EditProfileModal onUpdate={onProfileUpdate} /> : <Button type="primary" block >Subscribe</Button>}
                 <Typography.Paragraph style={{ marginBottom: 0 }}>
                     {profile.bio}
                 </Typography.Paragraph>

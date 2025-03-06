@@ -11,7 +11,11 @@ import {useAuthModal} from "../../../../components/LayoutWrapper/useAuthModal.ts
 import {profilesProfileIdAvatarDelete} from "../../../../api/profiles/profilesProfileIdAvatarDelete.ts";
 import {profilesProfileIdPatch} from "../../../../api/profiles/profilesProfileIdPatch.ts";
 
-export const EditProfileModal: FC = () => {
+type Props = {
+    onUpdate: VoidFunction;
+}
+
+export const EditProfileModal: FC<Props> = ({ onUpdate }) => {
     const { message } = App.useApp();
     const { profile } = useOwnProfile();
     const { checkAuth } = useAuthModal();
@@ -21,10 +25,10 @@ export const EditProfileModal: FC = () => {
     const [avatarLoading, setAvatarLoading] = useState(false);
     const handleAvatarUpload: UploadProps['beforeUpload'] = async (file) => {
         setAvatarLoading(true);
-        console.log(file);
         void profilesProfileIdAvatarPut(profile!.id, file).then(() => {
             void message.success('Success');
             checkAuth();
+            onUpdate();
         }).catch((e) => {
             console.error(e);
             void message.error(`Error (${JSON.stringify(e)})`);
@@ -36,6 +40,7 @@ export const EditProfileModal: FC = () => {
         profilesProfileIdAvatarDelete(profile!.id).then(() => {
             void message.success('Success');
             checkAuth();
+            onUpdate();
         }).catch((e) => {
             console.error(e);
             void message.error(`Error (${JSON.stringify(e)})`)
@@ -49,6 +54,7 @@ export const EditProfileModal: FC = () => {
         profilesProfileIdPatch(profile!.id, values).then(() => {
             void message.success('Success');
             checkAuth();
+            onUpdate();
             setOpen(false);
         }).catch((e) => {
             console.error(e);

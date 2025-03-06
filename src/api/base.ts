@@ -10,8 +10,9 @@ type BaseRequestParams = {
     contentType?: string;
 };
 
-const transformData = (data: any) => {
+const transformData = (data: any, contentType?: string) => {
     if(!data) return undefined;
+    if(contentType) return data;
 
     if(isObject(data)) return JSON.stringify(data);
 
@@ -31,7 +32,7 @@ export const baseRequestService = <T>({
         headers: {
             'Content-Type': contentType || (isObject(data) ? 'application/json; charset=utf-8' : 'application/octet-stream')
         },
-        body: transformData(data),
+        body: transformData(data, contentType),
         credentials: 'same-origin'
     }).then((r) => {
         if(!r.ok) throw new Error(r.status.toString());

@@ -21,7 +21,7 @@ export const AvatarUploadContent: FC<Props> = ({ url, loading }) => {
 
     return (
         <img
-            src={url}
+            src={`${url}?${new Date().getTime()}`}
             alt="avatar"
             className={styles.image}
             onError={() => setError(true)}

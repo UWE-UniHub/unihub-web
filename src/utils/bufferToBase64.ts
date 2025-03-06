@@ -1,4 +1,6 @@
-export const bufferToBase64 = async (buffer: Uint8Array) => {
+import {RcFile} from "antd/es/upload";
+
+export const bufferToBase64 = async (buffer: Uint8Array | RcFile) => {
     const base64url: string = await new Promise(r => {
         const reader = new FileReader()
         reader.onload = () => r(reader.result as string)

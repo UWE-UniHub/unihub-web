@@ -10,7 +10,7 @@ type Props = {
 
 export const ProfileAvatar: FC<Props> = ({ profile, ...rest }) => (
     <Avatar
-        src={getProfileAvatarUrl(profile.id)}
+        src={`${getProfileAvatarUrl(profile.id)}?${new Date().getTime()}`}
         style={{ backgroundColor: stringToColor(`${profile.first_name[0]}${profile.last_name[0]}`) }}
         {...rest}
     >

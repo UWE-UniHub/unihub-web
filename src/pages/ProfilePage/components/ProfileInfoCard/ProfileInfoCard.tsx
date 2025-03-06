@@ -2,12 +2,17 @@ import {FC} from "react";
 import {Button, Card, Flex, Typography} from "antd";
 import {Profile} from "../../../../types/domain.ts";
 import {ProfileAvatar} from "../../../../components/ProfileAvatar/ProfileAvatar.tsx";
+import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
+import {EditProfileModal} from "../EditProfileModal/EditProfileModal.tsx";
 
 type Props = {
     profile: Profile;
 }
 
 export const ProfileInfoCard: FC<Props> = ({ profile }) => {
+    const { profile: ownProfile } = useOwnProfile();
+    const isOwnProfile = profile.id === ownProfile?.id;
+
     return (
         <Card>
             <Flex vertical align="center" gap={16}>
@@ -28,7 +33,7 @@ export const ProfileInfoCard: FC<Props> = ({ profile }) => {
                         </Flex>
                     </Flex>
                 </Flex>
-                <Button type="primary" block >Subscribe</Button>
+                {isOwnProfile ? <EditProfileModal /> : <Button type="primary" block >Subscribe</Button>}
                 <Typography.Paragraph style={{ marginBottom: 0 }}>
                     {profile.bio}
                 </Typography.Paragraph>

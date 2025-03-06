@@ -7,6 +7,7 @@ type BaseRequestParams = {
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
     params?: Record<string, string | number | boolean>;
     data?: any;
+    contentType?: string;
 };
 
 const transformData = (data: any) => {
@@ -14,20 +15,21 @@ const transformData = (data: any) => {
 
     if(isObject(data)) return JSON.stringify(data);
 
-    return new Blob([data], { type: 'text/plain' });
+    return data;
 }
 
 export const baseRequestService = <T>({
-   url,
-   method,
-   params,
-   data,
+    url,
+    method,
+    params,
+    data,
+    contentType
 }: BaseRequestParams): Promise<T> => {
     // @ts-expect-error typings are sad
     return fetch(API_BASE_URL + url + (!isEmpty(params) ? `?${new URLSearchParams(params)}` : ''), {
         method,
         headers: {
-            'Content-Type': isObject(data) ? 'application/json; charset=utf-8' : 'text/plain;charset=UTF-8'
+            'Content-Type': contentType || (isObject(data) ? 'application/json; charset=utf-8' : 'application/octet-stream')
         },
         body: transformData(data),
         credentials: 'same-origin'

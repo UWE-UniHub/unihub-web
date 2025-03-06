@@ -6,7 +6,6 @@ import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
 import {AvatarUploadContent} from "../../../../components/AvatarUploadContent/AvatarUploadContent.tsx";
 import {getProfileAvatarUrl} from "../../../../utils/getProfileAvatarUrl.ts";
 import styles from './EditProfileModal.module.css';
-import {bufferToBase64} from "../../../../utils/bufferToBase64.ts";
 import {profilesProfileIdAvatarPut} from "../../../../api/profiles/profilesProfileIdAvatarPut.ts";
 import {useAuthModal} from "../../../../components/LayoutWrapper/useAuthModal.ts";
 import {profilesProfileIdAvatarDelete} from "../../../../api/profiles/profilesProfileIdAvatarDelete.ts";
@@ -23,7 +22,7 @@ export const EditProfileModal: FC = () => {
     const handleAvatarUpload: UploadProps['beforeUpload'] = async (file) => {
         setAvatarLoading(true);
         console.log(file);
-        void profilesProfileIdAvatarPut(profile!.id, await bufferToBase64(file)).then(() => {
+        void profilesProfileIdAvatarPut(profile!.id, file).then(() => {
             void message.success('Success');
             checkAuth();
         }).catch((e) => {

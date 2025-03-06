@@ -15,8 +15,8 @@ export const LayoutWrapper: FC = () => {
     const { profile, setProfile } = useOwnProfile();
     const { message } = App.useApp();
 
-    const checkAuth = useCallback(() => {
-        if(!profile) {
+    const checkAuth = useCallback((force?: boolean) => {
+        if(force || !profile) {
             authGet().then((payload) => {
                 if(payload) {
                     setProfile(payload);
@@ -27,7 +27,7 @@ export const LayoutWrapper: FC = () => {
 
     useEffect(() => {
         checkAuth();
-    }, [profile]);
+    }, []);
 
     const handleLogout = () => {
         authDelete().then(() => setProfile(null));
@@ -43,7 +43,7 @@ export const LayoutWrapper: FC = () => {
 
             setAuthModalState(state);
         },
-        checkAuth
+        checkAuth: () => checkAuth(true)
     }), [profile, checkAuth]);
 
     return (

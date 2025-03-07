@@ -1,12 +1,13 @@
 import {FC, useState} from "react";
-import {Button, Card, Flex, Typography} from "antd";
-import {Profile} from "../../../../types/domain.ts";
+import {Card, Flex, Typography} from "antd";
+import {ProfileById} from "../../../../types/domain.ts";
 import {ProfileAvatar} from "../../../../components/ProfileAvatar/ProfileAvatar.tsx";
 import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
 import {EditProfileModal} from "../EditProfileModal/EditProfileModal.tsx";
+import {SubscribeButton} from "../SubscribeButton/SubscribeButton.tsx";
 
 type Props = {
-    profile: Profile;
+    profile: ProfileById;
     onProfileUpdate: VoidFunction;
 }
 
@@ -41,7 +42,15 @@ export const ProfileInfoCard: FC<Props> = ({ profile, onProfileUpdate }) => {
                         </Flex>
                     </Flex>
                 </Flex>
-                {isOwnProfile ? <EditProfileModal onUpdate={handleUpdate} /> : <Button type="primary" block >Subscribe</Button>}
+                {isOwnProfile ? (
+                    <EditProfileModal onUpdate={handleUpdate} />
+                ) : (
+                    <SubscribeButton
+                        profileId={profile.id}
+                        subscribed={profile.is_subscribed}
+                        onUpdate={handleUpdate}
+                    />
+                )}
                 <Typography.Paragraph style={{ marginBottom: 0 }}>
                     {profile.bio}
                 </Typography.Paragraph>

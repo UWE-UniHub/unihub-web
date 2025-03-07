@@ -42,6 +42,10 @@ export interface Profile {
   staff: ProfileStaffInfo | null;
 }
 
+export type ProfileById = Profile & {
+  is_subscribed: boolean;
+};
+
 export interface ProfilePatch {
   first_name?: string;
   last_name?: string;
@@ -52,9 +56,14 @@ export interface Community {
   id: string;
   name: string;
   bio: string | null;
-  admin?: Profile[];
   subscribers: number;
 }
+
+export type CommunityDetailed = Community & {
+  is_admin: boolean;
+  is_creator: boolean;
+  is_subscribed: boolean;
+};
 
 export interface CommunityPost {
   id: string;
@@ -67,7 +76,12 @@ export interface CommunityPatch {
   bio?: string | null;
 }
 
-export interface Post {
+export interface CommunityAdmins {
+  creator?: Profile;
+  admins?: Profile[];
+}
+
+export interface PostGeneric {
   /** @format uuid */
   id: string;
   content: string;
@@ -75,9 +89,15 @@ export interface Post {
   created_at: string;
   /** @format uuid */
   event_id: string | null;
-  profile: Profile;
-  community: Community | null;
 }
+
+export type PostProfile = PostGeneric & {
+  profile?: Profile;
+};
+
+export type PostCommunity = PostGeneric & {
+  community?: Community;
+};
 
 export interface PostPost {
   content: string;
@@ -124,13 +144,13 @@ export interface LoginPost {
 }
 
 export interface Levels {
-  levels: string[];
+  levels?: string[];
 }
 
 export interface Schools {
-  schools: string[];
+  schools?: string[];
 }
 
 export interface Departments {
-  departments: string[];
+  departments?: string[];
 }

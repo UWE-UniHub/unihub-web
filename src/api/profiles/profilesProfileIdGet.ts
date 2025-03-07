@@ -1,7 +1,7 @@
 import {baseRequestService} from "../base.ts";
-import {Profile} from "../../types/domain.ts";
+import {ProfileById} from "../../types/domain.ts";
 
-export const profilesProfileIdGet = (id: string) => baseRequestService<Profile>({
+export const profilesProfileIdGet = (id: string) => baseRequestService<ProfileById>({
     url: `/profiles/${id}`,
     method: 'GET',
 })

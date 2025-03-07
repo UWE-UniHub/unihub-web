@@ -144,13 +144,13 @@ export interface LoginPost {
 }
 
 export interface Levels {
-  levels?: string[];
+  levels: string[];
 }
 
 export interface Schools {
-  schools?: string[];
+  schools: string[];
 }
 
 export interface Departments {
-  departments?: string[];
+  departments: string[];
 }

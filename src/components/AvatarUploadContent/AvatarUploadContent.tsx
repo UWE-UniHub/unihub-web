@@ -4,17 +4,16 @@ import styles from './AvatarUploadContent.module.css';
 
 type Props = {
     url: string | undefined;
+    version: number;
     loading: boolean;
 }
 
-export const AvatarUploadContent: FC<Props> = ({ url, loading }) => {
+export const AvatarUploadContent: FC<Props> = ({ url, version, loading }) => {
     const [error, setError] = useState(false);
-
-    const src = `${url}?${new Date().getTime()}`;
 
     useEffect(() => {
         setError(false);
-    }, [src]);
+    }, [version]);
 
     if(!url || error) {
         return (
@@ -27,7 +26,7 @@ export const AvatarUploadContent: FC<Props> = ({ url, loading }) => {
 
     return (
         <img
-            src={src}
+            src={`${url}?${version}`}
             alt="avatar"
             className={styles.image}
             onError={() => setError(true)}

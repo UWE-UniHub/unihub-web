@@ -23,12 +23,14 @@ export const EditProfileModal: FC<Props> = ({ onUpdate }) => {
     const [form] = Form.useForm();
 
     const [avatarLoading, setAvatarLoading] = useState(false);
+    const [avatarVersion, setAvatarVersion] = useState(0);
     const handleAvatarUpload: UploadProps['beforeUpload'] = async (file) => {
         setAvatarLoading(true);
         void profilesProfileIdAvatarPut(profile!.id, file).then(() => {
             void message.success('Success');
             checkAuth();
             onUpdate();
+            setAvatarVersion((v) => v + 1);
         }).catch((e) => {
             console.error(e);
             void message.error(`Error (${JSON.stringify(e)})`);
@@ -41,6 +43,7 @@ export const EditProfileModal: FC<Props> = ({ onUpdate }) => {
             void message.success('Success');
             checkAuth();
             onUpdate();
+            setAvatarVersion((v) => v + 1);
         }).catch((e) => {
             console.error(e);
             void message.error(`Error (${JSON.stringify(e)})`)
@@ -101,6 +104,7 @@ export const EditProfileModal: FC<Props> = ({ onUpdate }) => {
                         >
                             <AvatarUploadContent
                                 url={profile?.id ? getProfileAvatarUrl(profile.id) : undefined}
+                                version={avatarVersion}
                                 loading={avatarLoading}
                             />
                         </Upload>

@@ -104,12 +104,19 @@ export const EditProfileModal: FC<Props> = ({ onUpdate }) => {
                 onCancel={() => setOpen(false)}
                 destroyOnClose
                 footer={(buttons) => (
-                    <>
-                        <Button key="delete" danger onClick={handleDeleteProfile}>
+                    <Flex justify="space-between">
+                        <Button
+                            key="delete"
+                            type="primary"
+                            danger
+                            onClick={handleDeleteProfile}
+                        >
                             Delete profile
                         </Button>
-                        {buttons}
-                    </>
+                        <Flex gap={8}>
+                            {buttons}
+                        </Flex>
+                    </Flex>
                 )}
             >
                 <Form<ProfilePatch>

@@ -1,7 +1,6 @@
 import {baseRequestService} from "../base.ts";
-import {ProfileById} from "../../types/domain.ts";
 
-export const profilesProfileIdDelete = (id: string) => baseRequestService<ProfileById>({
+export const profilesProfileIdDelete = (id: string) => baseRequestService({
     url: `/profiles/${id}`,
     method: 'DELETE',
 })

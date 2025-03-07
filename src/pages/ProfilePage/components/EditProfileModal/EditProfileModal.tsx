@@ -99,12 +99,18 @@ export const EditProfileModal: FC<Props> = ({ onUpdate }) => {
                 title="Edit profile"
                 width={400}
                 open={open}
+                onOk={form.submit}
+                okButtonProps={{ loading }}
+                onCancel={() => setOpen(false)}
                 destroyOnClose
-                footer={[
-                    <Button key="delete" danger onClick={handleDeleteProfile}>Delete profile</Button>,
-                    <Button key="cancel" onClick={() => setOpen(false)}>Cancel</Button>,
-                    <Button key="ok" type="primary" onClick={form.submit} loading={loading}>OK</Button>,
-                ]}
+                footer={(buttons) => (
+                    <>
+                        <Button key="delete" danger onClick={handleDeleteProfile}>
+                            Delete profile
+                        </Button>
+                        {buttons}
+                    </>
+                )}
             >
                 <Form<ProfilePatch>
                     form={form}

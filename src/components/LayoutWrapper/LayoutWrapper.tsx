@@ -15,6 +15,8 @@ export const LayoutWrapper: FC = () => {
     const { profile, setProfile } = useOwnProfile();
     const { message } = App.useApp();
 
+    const [avatarVersion, setAvatarVersion] = useState(0);
+
     const checkAuth = useCallback((force?: boolean) => {
         if(force || !profile) {
             authGet().then((payload) => {
@@ -22,6 +24,7 @@ export const LayoutWrapper: FC = () => {
                     setProfile(payload);
                 }
             });
+            setAvatarVersion((v) => v + 1);
         }
     }, [profile]);
 
@@ -96,7 +99,7 @@ export const LayoutWrapper: FC = () => {
                         >
                             <Button type="text">
                                 <Flex align="center" gap={8}>
-                                    <ProfileAvatar profile={profile} />
+                                    <ProfileAvatar profile={profile} version={avatarVersion} />
                                     <Typography.Text style={{ color: token.colorTextLightSolid }}>
                                         {profile.first_name} {profile.last_name}
                                     </Typography.Text>

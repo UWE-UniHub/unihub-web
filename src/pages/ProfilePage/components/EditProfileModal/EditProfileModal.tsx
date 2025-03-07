@@ -1,6 +1,6 @@
 import {FC, useState} from "react";
 import {App, Button, Flex, Form, FormProps, Input, Modal, Upload, UploadProps} from "antd";
-import {EditOutlined} from "@ant-design/icons";
+import {EditOutlined, ExclamationCircleOutlined} from "@ant-design/icons";
 import {ProfilePatch} from "../../../../types/domain.ts";
 import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
 import {AvatarUploadContent} from "../../../../components/AvatarUploadContent/AvatarUploadContent.tsx";
@@ -10,6 +10,7 @@ import {profilesProfileIdAvatarPut} from "../../../../api/profiles/profilesProfi
 import {useAuthModal} from "../../../../components/LayoutWrapper/useAuthModal.ts";
 import {profilesProfileIdAvatarDelete} from "../../../../api/profiles/profilesProfileIdAvatarDelete.ts";
 import {profilesProfileIdPatch} from "../../../../api/profiles/profilesProfileIdPatch.ts";
+import {profilesProfileIdDelete} from "../../../../api/profiles/profilesProfileIdDelete.ts";
 
 type Props = {
     onUpdate: VoidFunction;
@@ -35,7 +36,6 @@ export const EditProfileModal: FC<Props> = ({ onUpdate }) => {
             console.error(e);
             void message.error(`Error (${JSON.stringify(e)})`);
         }).finally(() => setAvatarLoading(false));
-
         return false;
     }
     const handleAvatarDelete = () => {
@@ -65,6 +65,28 @@ export const EditProfileModal: FC<Props> = ({ onUpdate }) => {
         }).finally(() => setLoading(false))
     }
 
+    const handleDeleteProfile = () => {
+        Modal.confirm({
+            title: 'Delete your profile?',
+            icon: <ExclamationCircleOutlined />,
+            content: 'This action cannot be undone.',
+            okText: 'Yes, delete',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk: () => {
+                return profilesProfileIdDelete(profile!.id).then(() => {
+                    void message.success('Success');
+                    checkAuth();
+                    onUpdate();
+                    setOpen(false);
+                }).catch((e) => {
+                    console.error(e);
+                    void message.error(`Error (${JSON.stringify(e)})`);
+                });
+            },
+        });
+    }
+
     return (
         <>
             <Button
@@ -81,6 +103,21 @@ export const EditProfileModal: FC<Props> = ({ onUpdate }) => {
                 okButtonProps={{ loading }}
                 onCancel={() => setOpen(false)}
                 destroyOnClose
+                footer={(buttons) => (
+                    <Flex justify="space-between">
+                        <Button
+                            key="delete"
+                            type="primary"
+                            danger
+                            onClick={handleDeleteProfile}
+                        >
+                            Delete profile
+                        </Button>
+                        <Flex gap={8}>
+                            {buttons}
+                        </Flex>
+                    </Flex>
+                )}
             >
                 <Form<ProfilePatch>
                     form={form}

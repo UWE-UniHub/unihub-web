@@ -8,6 +8,8 @@ import {Spin} from "antd";
 import {useCommunityById} from "../../queries/useCommunityById.ts";
 import {CommunityFeedColumn} from "./components/CommunityFeedColumn/CommunityFeedColumn.tsx";
 import {EditCommunityModal} from "./components/EditCommunityModal/EditCommunityModal.tsx";
+import {useCommunityFollowers} from "../../queries/useCommunityFollowers.ts";
+import {ProfilesListModal} from "../../components/ProfilesListModal/ProfilesListModal.tsx";
 
 export const CommunityPage: FC = () => {
     const { communityId } = useParams();
@@ -19,6 +21,9 @@ export const CommunityPage: FC = () => {
         setAvatarVersion(v => v + 1);
         void refetch();
     }
+
+    const [subscribersOpen, setSubscribersOpen] = useState(false);
+    const { data: subscribers } = useCommunityFollowers(communityId!, subscribersOpen);
 
     return (
         <div className={styles.container}>
@@ -43,6 +48,12 @@ export const CommunityPage: FC = () => {
                     onUpdate={handleUpdate}
                 />
             )}
+            <ProfilesListModal
+                title="Subscribers"
+                profiles={subscribers}
+                open={subscribersOpen}
+                onClose={() => setSubscribersOpen(false)}
+            />
         </div>
     )
 }

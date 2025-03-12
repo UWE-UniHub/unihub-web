@@ -8,6 +8,8 @@ import {Spin} from "antd";
 import {useCommunityById} from "../../queries/useCommunityById.ts";
 import {CommunityFeedColumn} from "./components/CommunityFeedColumn/CommunityFeedColumn.tsx";
 import {EditCommunityModal} from "./components/EditCommunityModal/EditCommunityModal.tsx";
+import {useCommunityFollowers} from "../../queries/useCommunityFollowers.ts";
+import {ProfilesListModal} from "../../components/ProfilesListModal/ProfilesListModal.tsx";
 
 export const CommunityPage: FC = () => {
     const { communityId } = useParams();
@@ -20,6 +22,9 @@ export const CommunityPage: FC = () => {
         void refetch();
     }
 
+    const [subscribersOpen, setSubscribersOpen] = useState(false);
+    const { data: subscribers } = useCommunityFollowers(communityId!, subscribersOpen);
+
     return (
         <div className={styles.container}>
             <Spin spinning={!community} fullscreen />
@@ -30,6 +35,7 @@ export const CommunityPage: FC = () => {
                     onUpdate={refetch}
                     onEdit={() => setEditOpen(true)}
                     avatarVersion={avatarVersion}
+                    onShowSubscribers={() => setSubscribersOpen(true)}
                 />
             )}
             <div className={styles.feedColumnContainer}>
@@ -43,6 +49,12 @@ export const CommunityPage: FC = () => {
                     onUpdate={handleUpdate}
                 />
             )}
+            <ProfilesListModal
+                title="Subscribers"
+                profiles={subscribers}
+                open={subscribersOpen}
+                onClose={() => setSubscribersOpen(false)}
+            />
         </div>
     )
 }

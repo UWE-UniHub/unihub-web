@@ -8,6 +8,8 @@ type Props = GenericProfileCommunityProps & {
     avatarVersion: number;
     onUpdate: VoidFunction;
     onEdit: VoidFunction;
+    onShowSubscribers?: VoidFunction;
+    onShowSubscriptions?: VoidFunction;
 };
 
 export const GenericProfileCommunityColumn: FC<Props> = (props) => (

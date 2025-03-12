@@ -2,20 +2,23 @@ import {FC, useState} from "react";
 import {App, Button} from "antd";
 import {profilesProfileIdFollowPost} from "../../../../api/profiles/profilesProfileIdFollowPost.ts";
 import {profilesProfileIdFollowDelete} from "../../../../api/profiles/profilesProfileIdFollowDelete.ts";
+import {communitiesCommunityIdFollowPost} from "../../../../api/communities/communitiesCommunityIdFollowPost.ts";
+import {communitiesCommunityIdFollowDelete} from "../../../../api/communities/communitiesCommunityIdFollowDelete.ts";
 
 type Props = {
-    profileId: string;
+    type: 'profile' | 'community';
+    id: string;
     subscribed: boolean;
     onUpdate: VoidFunction;
 }
 
-export const SubscribeButton: FC<Props> = ({ profileId, subscribed, onUpdate }) => {
+export const SubscribeButton: FC<Props> = ({ type, id, subscribed, onUpdate }) => {
     const { message } = App.useApp();
     const [loading, setLoading] = useState(false);
 
     const handleSubscribe = () => {
         setLoading(true);
-        profilesProfileIdFollowPost(profileId).then(() => {
+        (type === 'profile' ? profilesProfileIdFollowPost : communitiesCommunityIdFollowPost)(id).then(() => {
             void message.success('Subscribed!');
             onUpdate();
         }).catch((e) => {
@@ -26,7 +29,7 @@ export const SubscribeButton: FC<Props> = ({ profileId, subscribed, onUpdate }) 
 
     const handleUnsubscribe = () => {
         setLoading(true);
-        profilesProfileIdFollowDelete(profileId).then(() => {
+        (type === 'profile' ? profilesProfileIdFollowDelete : communitiesCommunityIdFollowDelete)(id).then(() => {
             void message.success('Unsubscribed!');
             onUpdate();
         }).catch((e) => {

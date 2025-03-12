@@ -35,6 +35,7 @@ export const CommunityPage: FC = () => {
                     onUpdate={refetch}
                     onEdit={() => setEditOpen(true)}
                     avatarVersion={avatarVersion}
+                    onShowSubscribers={() => setSubscribersOpen(true)}
                 />
             )}
             <div className={styles.feedColumnContainer}>

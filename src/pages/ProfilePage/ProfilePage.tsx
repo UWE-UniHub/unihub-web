@@ -61,7 +61,7 @@ export const ProfilePage: FC = () => {
                 title="Subscriptions"
                 profiles={subscriptions}
                 open={subscriptionsOpen}
-                onClose={() => setSubscribersOpen(false)}
+                onClose={() => setSubscriptionsOpen(false)}
             />
         </div>
     )

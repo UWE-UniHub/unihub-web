@@ -2,20 +2,30 @@ import {FC} from "react";
 import {GenericProfileCommunityProps, isGenericCommunityProps, isGenericProfileProps} from "../../types.ts";
 import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
 import {Card, Flex, Typography} from "antd";
+import cx from 'classnames';
 import {ProfileAvatar} from "../../../ProfileAvatar/ProfileAvatar.tsx";
 import {SubscribeButton} from "../SubscribeButton/SubscribeButton.tsx";
 import {CommunityAvatar} from "../../../CommunityAvatar/CommunityAvatar.tsx";
 import {ActionButtonWrapper} from "../ActionButtonWrapper/ActionButtonWrapper.tsx";
+import styles from './ProfileCommunityInfoCard.module.css';
 
 type Props = GenericProfileCommunityProps & {
     avatarVersion: number;
     onUpdate: VoidFunction;
     onEdit: VoidFunction;
+    onShowSubscribers?: VoidFunction;
+    onShowSubscriptions?: VoidFunction;
 };
 
 export const ProfileCommunityInfoCard: FC<Props> = (props) => {
     const { profile: ownProfile } = useOwnProfile();
     const isOwnProfile = isGenericProfileProps(props) && props.profile.id === ownProfile?.id;
+
+    const subscribersOpenable = (isGenericProfileProps(props) ? props.profile.subscribers : props.community.subscribers) > 0;
+    const subscriptionsOpenable = isGenericProfileProps(props) && props.profile.subscriptions > 0;
+
+    const subscribersOpenableClassname = cx({[styles.subRow]: subscribersOpenable});
+    const subscriptionsOpenableClassname = cx({[styles.subRow]: subscriptionsOpenable});
 
     return (
         <Card>
@@ -38,12 +48,22 @@ export const ProfileCommunityInfoCard: FC<Props> = (props) => {
                         {isGenericProfileProps(props) ? `${props.profile.first_name} ${props.profile.last_name}` : props.community.name}
                     </Typography.Title>
                     <Flex gap={16}>
-                        <Flex gap={4} align="baseline">
+                        <Flex
+                            gap={4}
+                            align="baseline"
+                            onClick={subscribersOpenable ? props.onShowSubscribers : undefined}
+                            className={subscribersOpenableClassname}
+                        >
                             <Typography.Title level={5}>{isGenericProfileProps(props) ? props.profile.subscribers : props.community.subscribers}</Typography.Title>
                             <Typography.Text type="secondary">subscribers</Typography.Text>
                         </Flex>
                         {isGenericProfileProps(props) && (
-                            <Flex gap={4} align="baseline">
+                            <Flex
+                                gap={4}
+                                align="baseline"
+                                onClick={subscriptionsOpenable ? props.onShowSubscriptions : undefined}
+                                className={subscriptionsOpenableClassname}
+                            >
                                 <Typography.Title level={5}>{props.profile.subscriptions}</Typography.Title>
                                 <Typography.Text type="secondary">subscriptions</Typography.Text>
                             </Flex>

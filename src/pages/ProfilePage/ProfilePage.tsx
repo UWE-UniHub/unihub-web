@@ -8,6 +8,9 @@ import {useProfileById} from "../../queries/useProfileById.ts";
 import {useParams} from "react-router";
 import {Spin} from "antd";
 import {EditProfileModal} from "./components/EditProfileModal/EditProfileModal.tsx";
+import {useProfileFollowers} from "../../queries/useProfileFollowers.ts";
+import {useProfileSubscriptions} from "../../queries/useProfileSubscriptions.ts";
+import {ProfilesListModal} from "../../components/ProfilesListModal/ProfilesListModal.tsx";
 
 export const ProfilePage: FC = () => {
     const { profileId } = useParams();
@@ -20,6 +23,12 @@ export const ProfilePage: FC = () => {
         void refetch();
     }
 
+    const [subscribersOpen, setSubscribersOpen] = useState(false);
+    const { data: subscribers } = useProfileFollowers(profileId!, subscribersOpen);
+
+    const [subscriptionsOpen, setSubscriptionsOpen] = useState(false);
+    const { data: subscriptions } = useProfileSubscriptions(profileId!, subscriptionsOpen);
+
     return (
         <div className={styles.container}>
             <Spin spinning={!profile} fullscreen />
@@ -30,6 +39,8 @@ export const ProfilePage: FC = () => {
                     onUpdate={refetch}
                     onEdit={() => setEditOpen(true)}
                     avatarVersion={avatarVersion}
+                    onShowSubscribers={() => setSubscribersOpen(true)}
+                    onShowSubscriptions={() => setSubscriptionsOpen(true)}
                 />
             )}
             <div className={styles.feedColumnContainer}>
@@ -39,6 +50,18 @@ export const ProfilePage: FC = () => {
                 open={editOpen}
                 onClose={() => setEditOpen(false)}
                 onUpdate={handleUpdate}
+            />
+            <ProfilesListModal
+                title="Subscribers"
+                profiles={subscribers}
+                open={subscribersOpen}
+                onClose={() => setSubscribersOpen(false)}
+            />
+            <ProfilesListModal
+                title="Subscriptions"
+                profiles={subscriptions}
+                open={subscriptionsOpen}
+                onClose={() => setSubscribersOpen(false)}
             />
         </div>
     )

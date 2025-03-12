@@ -1,0 +1,7 @@
+.uploadContainer {
+    margin-bottom: 24px;
+}
+
+.upload :global(.ant-upload-select) {
+    overflow: hidden;
+}

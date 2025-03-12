@@ -1,36 +1,32 @@
 import {FC, useState} from "react";
+import {CommunityDetailed, CommunityPatch} from "../../../../types/domain.ts";
 import {App, Button, Flex, Form, FormProps, Input, Modal, Upload, UploadProps} from "antd";
+import {communitiesCommunityIdAvatarPut} from "../../../../api/communities/communitiesCommunityIdAvatarPut.ts";
+import {communitiesCommunityIdAvatarDelete} from "../../../../api/communities/communitiesCommunityIdAvatarDelete.ts";
+import {communitiesCommunityIdPatch} from "../../../../api/communities/communitiesCommunityIdPatch.ts";
 import {ExclamationCircleOutlined} from "@ant-design/icons";
-import {ProfilePatch} from "../../../../types/domain.ts";
-import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
-import {getProfileAvatarUrl} from "../../../../utils/getProfileAvatarUrl.ts";
-import styles from './EditProfileModal.module.css';
-import {profilesProfileIdAvatarPut} from "../../../../api/profiles/profilesProfileIdAvatarPut.ts";
-import {profilesProfileIdAvatarDelete} from "../../../../api/profiles/profilesProfileIdAvatarDelete.ts";
-import {profilesProfileIdPatch} from "../../../../api/profiles/profilesProfileIdPatch.ts";
-import {profilesProfileIdDelete} from "../../../../api/profiles/profilesProfileIdDelete.ts";
-import {useAuthModal} from "../../../../components/LayoutWrapper/useAuthModal.ts";
+import {communitiesCommunityIdDelete} from "../../../../api/communities/communitiesCommunityIdDelete.ts";
+import styles from "./EditCommunityModal.module.css";
 import {AvatarUploadContent} from "../../../../components/AvatarUploadContent/AvatarUploadContent.tsx";
+import {getCommunityAvatarUrl} from "../../../../utils/getCommunityAvatarUrl.ts";
 
 type Props = {
+    community: CommunityDetailed;
     open: boolean;
     onClose: VoidFunction;
     onUpdate: VoidFunction;
 }
 
-export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
-    const { message } = App.useApp();
-    const { profile } = useOwnProfile();
-    const { checkAuth } = useAuthModal();
-    const [form] = Form.useForm();
+export const EditCommunityModal: FC<Props> = ({ community, open, onClose, onUpdate }) => {
+    const { message, modal } = App.useApp();
+    const [form] = Form.useForm<CommunityPatch>();
 
     const [avatarLoading, setAvatarLoading] = useState(false);
     const [avatarVersion, setAvatarVersion] = useState(0);
     const handleAvatarUpload: UploadProps['beforeUpload'] = async (file) => {
         setAvatarLoading(true);
-        void profilesProfileIdAvatarPut(profile!.id, file).then(() => {
+        void communitiesCommunityIdAvatarPut(community.id, file).then(() => {
             void message.success('Success');
-            checkAuth();
             onUpdate();
             setAvatarVersion((v) => v + 1);
         }).catch((e) => {
@@ -40,9 +36,8 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
         return false;
     }
     const handleAvatarDelete = () => {
-        profilesProfileIdAvatarDelete(profile!.id).then(() => {
+        communitiesCommunityIdAvatarDelete(community.id).then(() => {
             void message.success('Success');
-            checkAuth();
             onUpdate();
             setAvatarVersion((v) => v + 1);
         }).catch((e) => {
@@ -52,12 +47,11 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
     }
 
     const [loading, setLoading] = useState(false);
-    const handleEdit: FormProps<ProfilePatch>['onFinish'] = (values) => {
+    const handleEdit: FormProps<CommunityPatch>['onFinish'] = (values) => {
         if(!form.isFieldsTouched()) return onClose();
         setLoading(true);
-        profilesProfileIdPatch(profile!.id, values).then(() => {
+        communitiesCommunityIdPatch(community.id, values).then(() => {
             void message.success('Success');
-            checkAuth();
             onUpdate();
             onClose();
         }).catch((e) => {
@@ -66,18 +60,17 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
         }).finally(() => setLoading(false))
     }
 
-    const handleDeleteProfile = () => {
-        Modal.confirm({
-            title: 'Delete your profile?',
+    const handleDeleteCommunity = () => {
+        modal.confirm({
+            title: 'Delete this community?',
             icon: <ExclamationCircleOutlined />,
             content: 'This action cannot be undone.',
             okText: 'Yes, delete',
             okType: 'danger',
             cancelText: 'No',
             onOk: () => {
-                return profilesProfileIdDelete(profile!.id).then(() => {
+                return communitiesCommunityIdDelete(community.id).then(() => {
                     void message.success('Success');
-                    checkAuth();
                     onUpdate();
                     onClose();
                 }).catch((e) => {
@@ -90,7 +83,7 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
 
     return (
         <Modal
-            title="Edit profile"
+            title="Edit community"
             width={400}
             open={open}
             onOk={form.submit}
@@ -103,9 +96,10 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                         key="delete"
                         type="primary"
                         danger
-                        onClick={handleDeleteProfile}
+                        onClick={handleDeleteCommunity}
+                        disabled={!community.is_creator}
                     >
-                        Delete profile
+                        Delete community
                     </Button>
                     <Flex gap={8}>
                         {buttons}
@@ -113,14 +107,13 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                 </Flex>
             )}
         >
-            <Form<ProfilePatch>
+            <Form<CommunityPatch>
                 form={form}
                 layout="vertical"
                 preserve={false}
                 initialValues={{
-                    first_name: profile?.first_name,
-                    last_name: profile?.last_name,
-                    bio: profile?.bio
+                    name: community.name,
+                    bio: community.bio
                 }}
                 onFinish={handleEdit}
             >
@@ -134,7 +127,7 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                         beforeUpload={handleAvatarUpload}
                     >
                         <AvatarUploadContent
-                            url={profile?.id ? getProfileAvatarUrl(profile.id) : undefined}
+                            url={getCommunityAvatarUrl(community.id)}
                             version={avatarVersion}
                             loading={avatarLoading}
                         />
@@ -144,21 +137,13 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                         onClick={handleAvatarDelete}
                     >Delete avatar</Button>
                 </Flex>
-                <Flex gap={16}>
-                    <Form.Item<ProfilePatch>
-                        name="first_name"
-                        label="First name"
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item<ProfilePatch>
-                        name="last_name"
-                        label="Last name"
-                    >
-                        <Input />
-                    </Form.Item>
-                </Flex>
-                <Form.Item<ProfilePatch>
+                <Form.Item<CommunityPatch>
+                    name="name"
+                    label="Name"
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item<CommunityPatch>
                     name="bio"
                     label="Bio"
                 >

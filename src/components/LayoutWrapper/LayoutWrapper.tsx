@@ -2,7 +2,7 @@ import {FC, useCallback, useEffect, useMemo, useState} from "react";
 import {App, Button, Flex, Layout, Menu, Popover, theme, Typography} from "antd";
 import styles from './LayoutWrapper.module.css';
 import {LoginOutlined, LogoutOutlined, TeamOutlined, UserOutlined} from "@ant-design/icons";
-import {Link, Outlet} from "react-router";
+import {Link, Outlet, useLocation} from "react-router";
 import {useOwnProfile} from "../../stores/OwnProfileStore.ts";
 import {authGet} from "../../api/auth/authGet.ts";
 import {AuthModal, AuthModalState} from "../AuthModal/AuthModal.tsx";
@@ -14,6 +14,8 @@ export const LayoutWrapper: FC = () => {
     const { token } = theme.useToken();
     const { profile, setProfile } = useOwnProfile();
     const { message } = App.useApp();
+
+    const { pathname } = useLocation();
 
     const [avatarVersion, setAvatarVersion] = useState(0);
 
@@ -71,7 +73,10 @@ export const LayoutWrapper: FC = () => {
                             theme="dark"
                             mode="horizontal"
                             disabledOverflow
-                            items={[]}
+                            selectedKeys={[pathname]}
+                            items={[
+                                { key: '/communities', label: <Link to="/communities">Communities</Link> }
+                            ]}
                         />
                     </Flex>
                     {profile ? (

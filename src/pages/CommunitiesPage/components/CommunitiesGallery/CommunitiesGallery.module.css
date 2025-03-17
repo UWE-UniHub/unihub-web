@@ -3,3 +3,11 @@
     grid-template-columns: 1fr 1fr 1fr;
     gap: 8px;
 }
+
+.bio {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 260px;
+}

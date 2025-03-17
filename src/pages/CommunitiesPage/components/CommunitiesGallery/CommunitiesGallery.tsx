@@ -25,7 +25,7 @@ export const CommunitiesGallery: FC<Props> = ({ communities }) => (
                                     <Typography.Text>{community.subscribers}</Typography.Text>
                                 </Flex>
                             </Flex>
-                            <Typography.Text>{community.bio}</Typography.Text>
+                            <Typography.Text className={styles.bio}>{community.bio}</Typography.Text>
                         </Flex>
                     </Flex>
                 </Card>

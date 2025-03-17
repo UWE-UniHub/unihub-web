@@ -5,13 +5,13 @@ import {CommunitiesGallery} from "./components/CommunitiesGallery/CommunitiesGal
 import {AddCommunityModal} from "./components/AddCommunityModal/AddCommunityModal.tsx";
 
 export const CommunitiesPage: FC = () => {
-    const { data: communities } = useCommunities();
+    const { data: communities, refetch } = useCommunities();
 
     return (
         <Flex vertical gap={16} flex="1 0">
             <Flex align="center" justify="space-between">
                 <Typography.Title level={3}>Communities</Typography.Title>
-                <AddCommunityModal />
+                <AddCommunityModal onCreate={refetch} />
             </Flex>
             {communities ? (
                 <CommunitiesGallery communities={communities} />

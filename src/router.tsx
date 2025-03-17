@@ -4,6 +4,7 @@ import {FeedPage} from "./pages/FeedPage/FeedPage.tsx";
 import {FC} from "react";
 import {ProfilePage} from "./pages/ProfilePage/ProfilePage.tsx";
 import {CommunityPage} from "./pages/CommunityPage/CommunityPage.tsx";
+import {CommunitiesPage} from "./pages/CommunitiesPage/CommunitiesPage.tsx";
 
 const path = (path: string, Page: FC): RouteObject => ({
     path,
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
         children: [
             path('/', FeedPage),
             path('/profile/:profileId', ProfilePage),
+            path('/communities', CommunitiesPage),
             path('/community/:communityId', CommunityPage),
             {
                 path: '/login',

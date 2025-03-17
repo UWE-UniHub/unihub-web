@@ -36,6 +36,8 @@ export const baseRequestService = <T>({
         credentials: 'same-origin'
     }).then((r) => {
         if(!r.ok) throw new Error(r.status.toString());
-        return r.json()
+        return r.headers.get('content-type')?.includes('json')
+            ? r.json()
+            : r.text()
     });
 }

@@ -8,6 +8,7 @@ import {SubscribeButton} from "../SubscribeButton/SubscribeButton.tsx";
 import {CommunityAvatar} from "../../../CommunityAvatar/CommunityAvatar.tsx";
 import {ActionButtonWrapper} from "../ActionButtonWrapper/ActionButtonWrapper.tsx";
 import styles from './ProfileCommunityInfoCard.module.css';
+import {AdminsModal} from "../AdminsModal/AdminsModal.tsx";
 
 type Props = GenericProfileCommunityProps & {
     avatarVersion: number;
@@ -83,6 +84,7 @@ export const ProfileCommunityInfoCard: FC<Props> = (props) => {
                         onUpdate={props.onUpdate}
                     />
                 </ActionButtonWrapper>
+                {isGenericCommunityProps(props) && <AdminsModal community={props.community} />}
                 <Typography.Paragraph style={{ marginBottom: 0 }}>
                     {isGenericProfileProps(props) ? props.profile.bio : props.community.bio}
                 </Typography.Paragraph>

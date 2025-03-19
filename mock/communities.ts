@@ -53,8 +53,58 @@ export default [
             "bio": "We are Foo Bar Community, welcome!",
             "subscribers": 567,
             "is_admin": true,
-            "is_creator": false,
+            "is_creator": true,
             "is_subscribed": false
+        }
+    },
+    {
+        url: makeUrl('/communities/:id/admins'),
+        method: 'get',
+        response: {
+            creator: {
+                "id": "44444444",
+                "first_name": "John",
+                "last_name": "Doe",
+                "bio": "Starter",
+                "is_staff": true,
+                "subscribers": 1,
+                "subscriptions": 0,
+                "student": null,
+                "staff": {
+                    "position": "Lecturer",
+                    "department": "FooBar"
+                }
+            },
+            admins: [
+                {
+                    "id": "44444445",
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "bio": "Starter",
+                    "is_staff": true,
+                    "subscribers": 1,
+                    "subscriptions": 0,
+                    "student": null,
+                    "staff": {
+                        "position": "Lecturer",
+                        "department": "FooBar"
+                    }
+                },
+                {
+                    "id": "44444446",
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "bio": "Starter",
+                    "is_staff": true,
+                    "subscribers": 1,
+                    "subscriptions": 0,
+                    "student": null,
+                    "staff": {
+                        "position": "Lecturer",
+                        "department": "FooBar"
+                    }
+                }
+            ]
         }
     }
 ] as MockMethod[];

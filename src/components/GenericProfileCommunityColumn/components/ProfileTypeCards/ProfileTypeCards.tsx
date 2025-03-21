@@ -10,7 +10,7 @@ type Props = {
 export const ProfileTypeCards: FC<Props> = ({ profile }) => {
     if(profile.is_staff) {
         return (
-            <Flex gap={16}>
+            <Flex gap={4}>
                 <Card
                     className={styles.cardItem}
                     classNames={{ body: styles.cardItemBody }}
@@ -34,8 +34,8 @@ export const ProfileTypeCards: FC<Props> = ({ profile }) => {
     }
 
     return (
-        <Flex vertical>
-            <Flex>
+        <Flex vertical gap={4}>
+            <Flex gap={4}>
                 <Card
                     className={styles.cardItem}
                     classNames={{ body: styles.cardItemBody }}

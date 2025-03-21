@@ -40,6 +40,7 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
         return false;
     }
     const handleAvatarDelete = () => {
+        setAvatarLoading(true);
         profilesProfileIdAvatarDelete(profile!.id).then(() => {
             void message.success('Success');
             checkAuth();
@@ -48,7 +49,7 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
         }).catch((e) => {
             console.error(e);
             void message.error(`Error (${JSON.stringify(e)})`)
-        })
+        }).finally(() => setAvatarLoading(false));
     }
 
     const [loading, setLoading] = useState(false);
@@ -142,6 +143,7 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                     <Button
                         danger
                         onClick={handleAvatarDelete}
+                        loading={avatarLoading}
                     >Delete avatar</Button>
                 </Flex>
                 <Flex gap={16}>

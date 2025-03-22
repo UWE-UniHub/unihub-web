@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {ArrowRightOutlined, PlusOutlined, UserSwitchOutlined} from "@ant-design/icons";
 import {App, Button, Flex, List, Modal, Popover, Select, Spin} from "antd";
 import {CommunityDetailed} from "../../../../types/domain.ts";
@@ -8,6 +8,7 @@ import {AdminsModalUserItem} from "../AdminsModalUserItem/AdminsModalUserItem.ts
 import {
     communitiesCommunityIdAdminsProfileIdPost
 } from "../../../../api/communities/communitiesCommunityIdAdminsProfileIdPost.ts";
+import {useCommunityEligibleAdmins} from "../../../../queries/useCommunityEligibleAdmins.ts";
 
 type Props = {
     community: CommunityDetailed;
@@ -19,8 +20,16 @@ export const AdminsModal: FC<Props> = ({ community }) => {
     const [open, setOpen] = useState(false);
 
     const { data: admins, refetch } = useCommunityAdmins(community.id);
+    const { data: eligibleAdmins, refetch: refetchEligible } = useCommunityEligibleAdmins(community.id);
 
-    const [selectedAdmin, setSelectedAdmin] = useState(''); // TODO first in avail
+    const [selectedAdmin, setSelectedAdmin] = useState('');
+
+    useEffect(() => {
+        if(eligibleAdmins) {
+            setSelectedAdmin(eligibleAdmins[0].id);
+        }
+    }, [eligibleAdmins]);
+
     const [loading, setLoading] = useState(false);
     const handleAddAdmin = () => {
         if(!selectedAdmin) return;
@@ -29,6 +38,7 @@ export const AdminsModal: FC<Props> = ({ community }) => {
         communitiesCommunityIdAdminsProfileIdPost(community.id, selectedAdmin).then(() => {
             void message.success('Success');
             void refetch();
+            void refetchEligible();
         }).catch((e) => {
             void message.error(`Error (${JSON.stringify(e)})`);
             console.error(e);
@@ -37,7 +47,11 @@ export const AdminsModal: FC<Props> = ({ community }) => {
 
     const addAdminPopoverContent = (
         <Flex gap={4}>
-            <Select // TODO avail options
+            <Select
+                options={eligibleAdmins?.map(({ id, first_name, last_name }) => ({
+                    value: id,
+                    label: `${first_name} ${last_name}`
+                }))}
                 className={styles.popoverSelect}
                 value={selectedAdmin}
                 onChange={setSelectedAdmin}
@@ -73,7 +87,7 @@ export const AdminsModal: FC<Props> = ({ community }) => {
                                community={community}
                                item={item}
                                isItemCreator={i === 0}
-                               onUpdate={refetch}
+                               onUpdate={() => { void refetch(); void refetchEligible(); }}
                            />
                         )}
                     />

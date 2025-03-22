@@ -26,7 +26,7 @@ export const AdminsModal: FC<Props> = ({ community }) => {
 
     useEffect(() => {
         if(eligibleAdmins) {
-            setSelectedAdmin(eligibleAdmins[0].id);
+            setSelectedAdmin(eligibleAdmins[0]?.id || '');
         }
     }, [eligibleAdmins]);
 
@@ -106,6 +106,7 @@ export const AdminsModal: FC<Props> = ({ community }) => {
                             block
                             icon={<PlusOutlined />}
                             loading={loading}
+                            disabled={!selectedAdmin?.length}
                         >Add admin</Button>
                     </Popover>
                 )}

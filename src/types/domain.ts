@@ -87,16 +87,17 @@ export interface PostGeneric {
   content: string;
   /** @format date-time */
   created_at: string;
-  /** @format uuid */
-  event_id: string | null;
+  event?: EventProfile | EventCommunity;
+  likes: number;
+  is_liked: boolean;
 }
 
 export type PostProfile = PostGeneric & {
-  profile?: Profile;
+  profile: Profile;
 };
 
 export type PostCommunity = PostGeneric & {
-  community?: Community;
+  community: Community;
 };
 
 export interface PostPost {
@@ -111,7 +112,7 @@ export interface PostPatch {
   event_id?: string | null;
 }
 
-export interface Event {
+export interface EventGeneric {
   /** @format uuid */
   id: string;
   description: string;
@@ -120,9 +121,15 @@ export interface Event {
   created_at: string;
   /** @format date-time */
   date: string;
-  profile: Profile;
-  community: Community | null;
 }
+
+export type EventProfile = EventGeneric & {
+  profile: Profile;
+};
+
+export type EventCommunity = EventGeneric & {
+  community: Community;
+};
 
 export interface EventPost {
   description: string;

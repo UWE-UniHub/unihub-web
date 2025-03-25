@@ -44,7 +44,9 @@ export const ProfilePage: FC = () => {
                 />
             )}
             <div className={styles.feedColumnContainer}>
-                <ProfileFeedColumn />
+                {profile ? (
+                    <ProfileFeedColumn profile={profile} />
+                ) : <Spin />}
             </div>
             <EditProfileModal
                 open={editOpen}

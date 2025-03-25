@@ -30,6 +30,7 @@ export const AdminsModal: FC<Props> = ({ community }) => {
         }
     }, [eligibleAdmins]);
 
+    const [popoverOpen, setPopoverOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const handleAddAdmin = () => {
         if(!selectedAdmin) return;
@@ -39,6 +40,7 @@ export const AdminsModal: FC<Props> = ({ community }) => {
             void message.success('Success');
             void refetch();
             void refetchEligible();
+            setPopoverOpen(false);
         }).catch((e) => {
             void message.error(`Error (${JSON.stringify(e)})`);
             console.error(e);
@@ -100,6 +102,8 @@ export const AdminsModal: FC<Props> = ({ community }) => {
                         placement="top"
                         content={addAdminPopoverContent}
                         classNames={{ body: styles.popoverContent }}
+                        open={popoverOpen}
+                        onOpenChange={setPopoverOpen}
                     >
                         <Button
                             type="primary"

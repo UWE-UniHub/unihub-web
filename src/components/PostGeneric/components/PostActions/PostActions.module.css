@@ -1,0 +1,11 @@
+.likesPreviewContainer {
+    cursor: pointer;
+}
+
+.likesPreviewContainer > *:not(:first-child) {
+    margin-left: -8px;
+}
+
+.likesPreviewMore {
+    background-color: var(--ant-color-text-secondary);
+}

@@ -24,7 +24,7 @@ export const PostGeneric: FC<Props> = ({ post, fullPage, onPostUpdate }) => {
     }
 
     return (
-        <Card hoverable={!fullPage} onClick={handlePostClick}>
+        <Card hoverable={!fullPage} onClick={handlePostClick} style={fullPage ? { flex: '1 0' } : undefined}>
             <Flex vertical gap={16}>
                 {isProfilePost(post) && <PostHeaderProfile profile={post.profile} createdAt={post.created_at} />}
                 {isCommunityPost(post) && <PostHeaderCommunity community={post.community} createdAt={post.created_at} />}

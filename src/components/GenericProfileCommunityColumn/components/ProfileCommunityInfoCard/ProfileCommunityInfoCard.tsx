@@ -4,11 +4,11 @@ import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
 import {Card, Flex, Typography} from "antd";
 import cx from 'classnames';
 import {ProfileAvatar} from "../../../ProfileAvatar/ProfileAvatar.tsx";
-import {SubscribeButton} from "../SubscribeButton/SubscribeButton.tsx";
 import {CommunityAvatar} from "../../../CommunityAvatar/CommunityAvatar.tsx";
 import {ActionButtonWrapper} from "../ActionButtonWrapper/ActionButtonWrapper.tsx";
 import styles from './ProfileCommunityInfoCard.module.css';
 import {AdminsModal} from "../AdminsModal/AdminsModal.tsx";
+import {SubscribeButton} from "../../../SubscribeButton/SubscribeButton.tsx";
 
 type Props = GenericProfileCommunityProps & {
     avatarVersion: number;

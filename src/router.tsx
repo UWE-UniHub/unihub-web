@@ -5,6 +5,7 @@ import {FC} from "react";
 import {ProfilePage} from "./pages/ProfilePage/ProfilePage.tsx";
 import {CommunityPage} from "./pages/CommunityPage/CommunityPage.tsx";
 import {CommunitiesPage} from "./pages/CommunitiesPage/CommunitiesPage.tsx";
+import {PostPage} from "./pages/PostPage/PostPage.tsx";
 
 const path = (path: string, Page: FC): RouteObject => ({
     path,
@@ -17,8 +18,10 @@ export const router = createBrowserRouter([
         children: [
             path('/', FeedPage),
             path('/profile/:profileId', ProfilePage),
+            path('/profile/:profileId/:postId', PostPage),
             path('/communities', CommunitiesPage),
             path('/community/:communityId', CommunityPage),
+            path('/community/:communityId/:postId', PostPage),
             {
                 path: '/login',
                 element: <Navigate to="/" state={{ modal: 'login' }} />

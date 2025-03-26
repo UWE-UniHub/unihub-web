@@ -1,14 +1,14 @@
 import {FC, useState} from "react";
 import {App, Button} from "antd";
-import {profilesProfileIdFollowPost} from "../../../../api/profiles/profilesProfileIdFollowPost.ts";
-import {profilesProfileIdFollowDelete} from "../../../../api/profiles/profilesProfileIdFollowDelete.ts";
-import {communitiesCommunityIdFollowPost} from "../../../../api/communities/communitiesCommunityIdFollowPost.ts";
-import {communitiesCommunityIdFollowDelete} from "../../../../api/communities/communitiesCommunityIdFollowDelete.ts";
-import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
-import {useAuthModal} from "../../../LayoutWrapper/useAuthModal.ts";
-import {useProfileSubscriptions} from "../../../../queries/useProfileSubscriptions.ts";
-import {useProfileFollowers} from "../../../../queries/useProfileFollowers.ts";
-import {useCommunityFollowers} from "../../../../queries/useCommunityFollowers.ts";
+import {profilesProfileIdFollowPost} from "../../api/profiles/profilesProfileIdFollowPost.ts";
+import {profilesProfileIdFollowDelete} from "../../api/profiles/profilesProfileIdFollowDelete.ts";
+import {communitiesCommunityIdFollowPost} from "../../api/communities/communitiesCommunityIdFollowPost.ts";
+import {communitiesCommunityIdFollowDelete} from "../../api/communities/communitiesCommunityIdFollowDelete.ts";
+import {useOwnProfile} from "../../stores/OwnProfileStore.ts";
+import {useAuthModal} from "../LayoutWrapper/useAuthModal.ts";
+import {useProfileSubscriptions} from "../../queries/useProfileSubscriptions.ts";
+import {useProfileFollowers} from "../../queries/useProfileFollowers.ts";
+import {useCommunityFollowers} from "../../queries/useCommunityFollowers.ts";
 
 type Props = {
     type: 'profile' | 'community';

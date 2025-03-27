@@ -6,6 +6,7 @@ import {ProfilePage} from "./pages/ProfilePage/ProfilePage.tsx";
 import {CommunityPage} from "./pages/CommunityPage/CommunityPage.tsx";
 import {CommunitiesPage} from "./pages/CommunitiesPage/CommunitiesPage.tsx";
 import {PostPage} from "./pages/PostPage/PostPage.tsx";
+import {EventsPage} from "./pages/EventsPage/EventsPage.tsx";
 
 const path = (path: string, Page: FC): RouteObject => ({
     path,
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
             path('/communities', CommunitiesPage),
             path('/community/:communityId', CommunityPage),
             path('/community/:communityId/:postId', PostPage),
+            path('/events', EventsPage),
             {
                 path: '/login',
                 element: <Navigate to="/" state={{ modal: 'login' }} />

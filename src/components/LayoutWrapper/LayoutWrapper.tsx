@@ -75,7 +75,8 @@ export const LayoutWrapper: FC = () => {
                             disabledOverflow
                             selectedKeys={[pathname]}
                             items={[
-                                { key: '/communities', label: <Link to="/communities">Communities</Link> }
+                                { key: '/communities', label: <Link to="/communities">Communities</Link> },
+                                { key: '/events', label: <Link to="/events">Events</Link> }
                             ]}
                         />
                     </Flex>

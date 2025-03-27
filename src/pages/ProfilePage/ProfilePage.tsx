@@ -11,6 +11,7 @@ import {EditProfileModal} from "./components/EditProfileModal/EditProfileModal.t
 import {useProfileFollowers} from "../../queries/useProfileFollowers.ts";
 import {useProfileSubscriptions} from "../../queries/useProfileSubscriptions.ts";
 import {ProfilesListModal} from "../../components/ProfilesListModal/ProfilesListModal.tsx";
+import {useProfileEvents} from "../../queries/useProfileEvents.ts";
 
 export const ProfilePage: FC = () => {
     const { profileId } = useParams();
@@ -29,13 +30,16 @@ export const ProfilePage: FC = () => {
     const [subscriptionsOpen, setSubscriptionsOpen] = useState(false);
     const { data: subscriptions } = useProfileSubscriptions(profileId!, subscriptionsOpen);
 
+    const { data: events } = useProfileEvents(profileId!);
+
     return (
         <div className={styles.container}>
             <Spin spinning={!profile} fullscreen />
-            {profile && (
+            {profile && events && (
                 <GenericProfileCommunityColumn
                     type="profile"
                     profile={profile}
+                    events={events}
                     onUpdate={refetch}
                     onEdit={() => setEditOpen(true)}
                     avatarVersion={avatarVersion}

@@ -10,6 +10,7 @@ import {CommunityFeedColumn} from "./components/CommunityFeedColumn/CommunityFee
 import {EditCommunityModal} from "./components/EditCommunityModal/EditCommunityModal.tsx";
 import {useCommunityFollowers} from "../../queries/useCommunityFollowers.ts";
 import {ProfilesListModal} from "../../components/ProfilesListModal/ProfilesListModal.tsx";
+import {useCommunityEvents} from "../../queries/useCommunityEvents.ts";
 
 export const CommunityPage: FC = () => {
     const { communityId } = useParams();
@@ -25,13 +26,16 @@ export const CommunityPage: FC = () => {
     const [subscribersOpen, setSubscribersOpen] = useState(false);
     const { data: subscribers } = useCommunityFollowers(communityId!, subscribersOpen);
 
+    const { data: events } = useCommunityEvents(communityId!);
+
     return (
         <div className={styles.container}>
             <Spin spinning={!community} fullscreen />
-            {community && (
+            {community && events && (
                 <GenericProfileCommunityColumn
                     type="community"
                     community={community}
+                    events={events}
                     onUpdate={refetch}
                     onEdit={() => setEditOpen(true)}
                     avatarVersion={avatarVersion}

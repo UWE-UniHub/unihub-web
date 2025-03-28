@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import {Link} from "react-router";
 import {EventCommunity, EventProfile} from "../../types/domain.ts";
 import {isCommunityEvent, isProfileEvent} from "../../utils/eventGuards.ts";
+import styles from './EventCard.module.css'
 
 const makeEventLink = (event: EventCommunity | EventProfile) => {
     if(isCommunityEvent(event))
@@ -33,7 +34,7 @@ export const EventCard: FC<Props> = ({ event, onClick }) =>
                         <Typography.Text>{event.location}</Typography.Text>
                     </Flex>
                 </Flex>
-                <Typography.Text>
+                <Typography.Text className={styles.location}>
                     {dateAsRelativeText(dayjs(event.date))}
                 </Typography.Text>
             </Flex>

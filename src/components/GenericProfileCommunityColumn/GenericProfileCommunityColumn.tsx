@@ -5,6 +5,7 @@ import {ProfileCommunityInfoCard} from "./components/ProfileCommunityInfoCard/Pr
 import {ProfileTypeCards} from "./components/ProfileTypeCards/ProfileTypeCards.tsx";
 import {EventCommunity, EventProfile} from "../../types/domain.ts";
 import {EventsColumn} from "../EventsColumn/EventsColumn.tsx";
+import styles from './GenericProfileCommunityColumn.module.css';
 
 type Props = GenericProfileCommunityProps & {
     events: (EventProfile | EventCommunity)[];
@@ -16,7 +17,7 @@ type Props = GenericProfileCommunityProps & {
 };
 
 export const GenericProfileCommunityColumn: FC<Props> = (props) => (
-    <Flex vertical gap={16}>
+    <Flex vertical gap={16} className={styles.container}>
         {isGenericProfileProps(props) && (
             <ProfileCommunityInfoCard
                 {...props}

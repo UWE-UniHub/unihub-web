@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import {Link} from "react-router";
 import {EventCommunity, EventProfile} from "../../types/domain.ts";
 import {isCommunityEvent, isProfileEvent} from "../../utils/eventGuards.ts";
+import styles from './EventCard.module.css'
 
 const makeEventLink = (event: EventCommunity | EventProfile) => {
     if(isCommunityEvent(event))
@@ -30,7 +31,7 @@ export const EventCard: FC<Props> = ({ event, onClick }) =>
                     <Typography.Title level={5} ellipsis>{event.description}</Typography.Title>
                     <Flex align="center" gap={4}>
                         <PushpinOutlined />
-                        <Typography.Text>{event.location}</Typography.Text>
+                        <Typography.Text className={styles.location}>{event.location}</Typography.Text>
                     </Flex>
                 </Flex>
                 <Typography.Text>

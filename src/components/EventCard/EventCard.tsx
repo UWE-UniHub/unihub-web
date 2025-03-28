@@ -31,10 +31,10 @@ export const EventCard: FC<Props> = ({ event, onClick }) =>
                     <Typography.Title level={5} ellipsis>{event.description}</Typography.Title>
                     <Flex align="center" gap={4}>
                         <PushpinOutlined />
-                        <Typography.Text>{event.location}</Typography.Text>
+                        <Typography.Text className={styles.location}>{event.location}</Typography.Text>
                     </Flex>
                 </Flex>
-                <Typography.Text className={styles.location}>
+                <Typography.Text>
                     {dateAsRelativeText(dayjs(event.date))}
                 </Typography.Text>
             </Flex>

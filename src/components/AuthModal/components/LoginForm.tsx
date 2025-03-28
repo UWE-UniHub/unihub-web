@@ -21,7 +21,8 @@ export const LoginForm: FC<Props> = ({ form, onFinish }) => (
             label="Student ID"
             rules={[{
                 required: true,
-                type: 'number'
+                type: 'number',
+                len: 8
             }]}
         >
             <InputNumber style={{ width: '100%' }} controls={false} />

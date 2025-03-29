@@ -21,8 +21,11 @@ export const LoginForm: FC<Props> = ({ form, onFinish }) => (
             label="Student ID"
             rules={[{
                 required: true,
-                type: 'number',
-                len: 8
+                type: 'string',
+                validator: (_, value) => {
+                    if(String(value).length === 8) return Promise.resolve();
+                    return Promise.reject('Student ID should be 8 digits');
+                }
             }]}
         >
             <InputNumber style={{ width: '100%' }} controls={false} />

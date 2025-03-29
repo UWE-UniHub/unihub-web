@@ -48,8 +48,8 @@ export const ProfilePage: FC = () => {
                 />
             )}
             <div className={styles.feedColumnContainer}>
-                {profile ? (
-                    <ProfileFeedColumn profile={profile} />
+                {profile && events ? (
+                    <ProfileFeedColumn profile={profile} events={events} />
                 ) : <Spin />}
             </div>
             <EditProfileModal

@@ -43,7 +43,9 @@ export const CommunityPage: FC = () => {
                 />
             )}
             <div className={styles.feedColumnContainer}>
-                <CommunityFeedColumn />
+                {community && events ? (
+                    <CommunityFeedColumn community={community} events={events} />
+                ) : <Spin />}
             </div>
             {community && (
                 <EditCommunityModal

@@ -1,0 +1,16 @@
+.textareaContainer {
+    flex: 1 0;
+    position: relative;
+}
+
+.textareaActions {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    left: 8px;
+}
+
+.image {
+    width: fit-content;
+    max-height: 100px;
+}

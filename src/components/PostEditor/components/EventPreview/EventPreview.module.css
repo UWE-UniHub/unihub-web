@@ -1,0 +1,5 @@
+.container {
+    background-color: var(--ant-color-fill-secondary);
+    border-radius: 7px;
+    padding: 16px;
+}

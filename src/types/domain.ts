@@ -161,3 +161,10 @@ export interface Schools {
 export interface Departments {
   departments: string[];
 }
+
+export interface Feed {
+  count: number;
+  next: number | null;
+  previous: number | null;
+  results: (PostCommunity | PostProfile)[];
+}

@@ -42,7 +42,10 @@ export const SignupForm: FC<Props> = ({ form, onFinish }) => {
                 rules={[{
                     required: true,
                     type: 'number',
-                    len: 8
+                    validator: (_, value) => {
+                        if(String(value).length === 8) return Promise.resolve();
+                        return Promise.reject('Student ID should be 8 digits');
+                    }
                 }]}
             >
                 <InputNumber style={{ width: '100%' }} controls={false} />

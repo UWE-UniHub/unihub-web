@@ -11,10 +11,10 @@ import {AddImagePopover} from "./components/AddImagePopover/AddImagePopover.tsx"
 import {RcFile} from "antd/es/upload";
 import {getBase64Upload} from "../../utils/getBase64Upload.ts";
 import {AddEventPopover} from "./components/AddEventPopover/AddEventPopover.tsx";
-import {EventPreview} from "./components/EventPreview/EventPreview.tsx";
 import {profilesProfileIdPostsPost} from "../../api/profiles/profilesProfileIdPostsPost.ts";
 import {communitiesCommunityIdPostsPost} from "../../api/communities/communitiesCommunityIdPostsPost.ts";
 import {postsPostIdImgPut} from "../../api/posts/postsPostIdImgPut.ts";
+import {EventPreview} from "../EventPreview/EventPreview.tsx";
 
 type Props = {
     target: Community | Profile;

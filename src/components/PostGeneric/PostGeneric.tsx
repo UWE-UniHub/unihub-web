@@ -7,6 +7,8 @@ import {PostHeaderCommunity} from "./components/PostHeaderCommunity/PostHeaderCo
 import styles from './PostGeneric.module.css';
 import {PostActions} from "./components/PostActions/PostActions.tsx";
 import {useNavigate} from "react-router";
+import {PostImage} from "./components/PostImage/PostImage.tsx";
+import {EventPreview} from "../EventPreview/EventPreview.tsx";
 
 type Props = {
     post: PostProfile | PostCommunity;
@@ -32,6 +34,8 @@ export const PostGeneric: FC<Props> = ({ post, fullPage, onPostUpdate }) => {
                     className={styles.postContent}
                     ellipsis={!fullPage ? { rows: 4, expandable: true, expanded: false } : undefined}
                 >{post.content}</Typography.Paragraph>
+                <PostImage postId={post.id} />
+                {post.event && <EventPreview event={post.event} clickable />}
                 <Divider className={styles.divider} />
                 <PostActions post={post} onPostUpdate={onPostUpdate} />
             </Flex>

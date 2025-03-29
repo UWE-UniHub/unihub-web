@@ -133,5 +133,14 @@ export default [
                 }
             }
         ]
+    },
+    {
+        url: makeUrl('/posts/:postId/img'),
+        method: 'get',
+        rawResponse: async (_, res) => {
+            res.setHeader('Location', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCBicf_37vAeZHXUtkIx5TGE8sBgCxO41mmQ&s');
+            res.statusCode = 302;
+            res.end();
+        }
     }
 ] as MockMethod[];

@@ -39,7 +39,31 @@ export default [
                     "\n" +
                     "Vestibulum condimentum pretium elit eget vestibulum. Quisque libero turpis, lacinia vel sem in, aliquet malesuada lorem. Nullam ut libero eu nulla pharetra vestibulum sed eget ipsum. Donec vehicula augue sed massa pretium finibus. Quisque dignissim dignissim turpis, sed porta felis tempus at. Quisque commodo accumsan arcu. Suspendisse eu metus iaculis, tincidunt dolor id, placerat augue. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In pulvinar lectus quis mi ornare, at sagittis urna rutrum. Quisque cursus ante eu urna finibus hendrerit.",
                 "created_at": "2025-03-24T22:29:43.570Z",
-                "event": undefined,
+                "event": {
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "description": "Event 1",
+                    "location": "3E021",
+                    "created_at": "2025-03-27T16:17:25.542Z",
+                    "date": "2025-03-27T16:17:25.542Z",
+                    "profile": {
+                        "id": "string",
+                        "first_name": "string",
+                        "last_name": "string",
+                        "is_staff": true,
+                        "bio": "string",
+                        "subscribers": 0,
+                        "subscriptions": 0,
+                        "student": {
+                            "program": "string",
+                            "level": "string",
+                            "school": "string"
+                        },
+                        "staff": {
+                            "position": "string",
+                            "department": "string"
+                        }
+                    }
+                },
                 "likes": 999,
                 "is_liked": true,
                 "profile": {

@@ -12,7 +12,7 @@ type Props = {
 export const CommunityAvatar: FC<Props> = ({ community, version, ...rest }) => (
     <Avatar
         src={`${getCommunityAvatarUrl(community.id)}?${version}`}
-        style={{ backgroundColor: stringToColor(`${community.name[0]}`) }}
+        style={{ backgroundColor: stringToColor(`${community.name[0]}`), flexShrink: 0 }}
         {...rest}
     >
         {community.name[0]}

@@ -6,6 +6,16 @@ import {viteMockServe} from "vite-plugin-mock";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   return {
+    server: {
+      ...(env.VITE_PROXY ? {
+        proxy: {
+          '/api': {
+            target: 'https://uwe.dyzoon.dev',
+            changeOrigin: true,
+          }
+        }
+      } : {})
+    },
     plugins: [
       react(),
       viteMockServe({

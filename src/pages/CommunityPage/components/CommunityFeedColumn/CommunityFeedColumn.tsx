@@ -1,10 +1,11 @@
-import {FC} from "react";
+import {FC, useEffect, useState} from "react";
 import {EmptyFeed} from "../../../../components/EmptyFeed/EmptyFeed.tsx";
-import {useCommunityPosts} from "../../../../queries/useCommunityPosts.ts";
 import {CommunityDetailed, EventCommunity} from "../../../../types/domain.ts";
-import {Flex, Typography} from "antd";
+import {App, Flex, Typography} from "antd";
 import {PostEditor} from "../../../../components/PostEditor/PostEditor.tsx";
-import {PostGeneric} from "../../../../components/PostGeneric/PostGeneric.tsx";
+import {useFeed} from "../../../../stores/FeedStore.ts";
+import {communitiesCommunityIdPostsGet} from "../../../../api/communities/communitiesCommunityIdPostsGet.ts";
+import {PostsFeed} from "../../../../components/PostsFeed/PostsFeed.tsx";
 
 type Props = {
     community: CommunityDetailed;
@@ -12,10 +13,40 @@ type Props = {
 }
 
 export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
-    // FIXME fix to fit feed specs with limit and cursor (separate Feed component)
-    const { data: posts, refetch } = useCommunityPosts(community.id);
+    const { message } = App.useApp();
+    const { feed, addPosts, updateLikes, flushPosts } = useFeed('community', community.id);
+    const [loading, setLoading] = useState(false);
 
-    if(!posts?.length) {
+    const initFeed = () => {
+        flushPosts();
+        setLoading(true);
+        communitiesCommunityIdPostsGet(community.id).then((f) => {
+            addPosts(f.results, f.next_page, f.count);
+        }).catch((e) => {
+            console.error(e);
+            void message.error(`Error loading the feed (${JSON.stringify(e)})`);
+        }).finally(() => setLoading(false));
+    }
+
+    const loadPosts = () => {
+        if(feed.posts.length >= feed.count) return;
+
+        setLoading(true);
+        return communitiesCommunityIdPostsGet(community.id, feed.next).then((f) => {
+            addPosts(f.results, f.next_page, f.count);
+        }).catch((e) => {
+            console.error(e);
+            void message.error(`Error loading the feed (${JSON.stringify(e)})`);
+        }).finally(() => setLoading(false));
+    }
+
+    useEffect(() => {
+        if(!feed.next) {
+            initFeed();
+        }
+    }, [initFeed, feed]);
+
+    if(!feed.posts.length) {
         return (
             <EmptyFeed />
         );
@@ -28,10 +59,15 @@ export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
                 <PostEditor
                     target={community}
                     events={events}
-                    onPost={refetch}
+                    onPost={initFeed}
                 />
             )}
-            {posts.map((post) => <PostGeneric key={post.id} post={post} onPostUpdate={refetch} />)}
+            <PostsFeed
+                posts={feed.posts}
+                loading={loading}
+                onScroll={loadPosts}
+                onLikesUpdate={updateLikes}
+            />
         </Flex>
     )
 }

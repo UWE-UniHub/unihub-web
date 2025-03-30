@@ -30,8 +30,8 @@ export const MorePostsColumn: FC<Props> = ({ post }) => {
 
     const filteredPosts = (
         isProfilePost(post) ?
-            profilePosts :
-            communityPosts
+            profilePosts?.results :
+            communityPosts?.results
     )?.filter(({ id }) =>
         post.id !== id
     ).slice(0, 3);

@@ -100,6 +100,24 @@ export type PostCommunity = PostGeneric & {
   community: Community;
 };
 
+export interface GenericFeed {
+  count: number;
+  next_page: number;
+  previous_page: number;
+}
+
+export type Feed = GenericFeed & {
+  results: (PostCommunity | PostProfile)[];
+};
+
+export type FeedProfile = GenericFeed & {
+  results: PostProfile[];
+};
+
+export type FeedCommunity = GenericFeed & {
+  results: PostCommunity[];
+};
+
 export interface PostPost {
   content: string;
   /** @format uuid */
@@ -160,11 +178,4 @@ export interface Schools {
 
 export interface Departments {
   departments: string[];
-}
-
-export interface Feed {
-  count: number;
-  next: number | null;
-  previous: number | null;
-  results: (PostCommunity | PostProfile)[];
 }

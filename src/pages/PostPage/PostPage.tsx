@@ -29,7 +29,7 @@ export const PostPage: FC = () => {
     return (
         <div className={styles.container}>
             <Flex className={styles.postContainer}>
-                <PostGeneric post={post} onPostUpdate={refetch} fullPage />
+                <PostGeneric post={post} onLikesUpdate={() => refetch()} fullPage />
             </Flex>
             <Flex vertical gap={16}>
                 {isProfilePost(post) && (

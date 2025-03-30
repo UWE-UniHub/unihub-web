@@ -12,10 +12,12 @@ import {useProfileFollowers} from "../../queries/useProfileFollowers.ts";
 import {useProfileSubscriptions} from "../../queries/useProfileSubscriptions.ts";
 import {ProfilesListModal} from "../../components/ProfilesListModal/ProfilesListModal.tsx";
 import {useProfileEvents} from "../../queries/useProfileEvents.ts";
+import {useOwnProfile} from "../../stores/OwnProfileStore.ts";
 
 export const ProfilePage: FC = () => {
     const { profileId } = useParams();
     const { data: profile, refetch } = useProfileById(profileId!);
+    const { profile: ownProfile } = useOwnProfile();
 
     const [editOpen, setEditOpen] = useState(false);
     const [avatarVersion, setAvatarVersion] = useState(0);
@@ -30,7 +32,7 @@ export const ProfilePage: FC = () => {
     const [subscriptionsOpen, setSubscriptionsOpen] = useState(false);
     const { data: subscriptions } = useProfileSubscriptions(profileId!, subscriptionsOpen);
 
-    const { data: events } = useProfileEvents(profileId!);
+    const { data: events, refetch: refetchEvents } = useProfileEvents(profileId!);
 
     return (
         <div className={styles.container}>
@@ -45,6 +47,8 @@ export const ProfilePage: FC = () => {
                     avatarVersion={avatarVersion}
                     onShowSubscribers={() => setSubscribersOpen(true)}
                     onShowSubscriptions={() => setSubscriptionsOpen(true)}
+                    eventsCreatable={ownProfile?.id === profile.id}
+                    onEventCreate={refetchEvents}
                 />
             )}
             <div className={styles.feedColumnContainer}>

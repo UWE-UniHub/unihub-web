@@ -4,12 +4,17 @@ import {Flex, Typography} from "antd";
 import {EventCard} from "../EventCard/EventCard.tsx";
 import {EventModal} from "../EventModal/EventModal.tsx";
 import {useSearchParams} from "react-router";
+import {CreateEventModal} from "../CreateEventModal/CreateEventModal.tsx";
+import {isProfileEvent} from "../../utils/eventGuards.ts";
 
 type Props = {
+    id: string;
     events: (EventCommunity | EventProfile)[];
+    eventsCreatable: boolean;
+    onCreate: VoidFunction;
 }
 
-export const EventsColumn: FC<Props> = ({ events }) => {
+export const EventsColumn: FC<Props> = ({ id, events, eventsCreatable, onCreate }) => {
     const [searchParams] = useSearchParams();
     const [eventModal, setEventModal] = useState<EventCommunity | EventProfile>();
 
@@ -25,7 +30,16 @@ export const EventsColumn: FC<Props> = ({ events }) => {
 
     return (
         <Flex vertical gap={16}>
-            <Typography.Title level={4}>Events</Typography.Title>
+            <Flex align="center">
+                <Typography.Title level={4}>Events</Typography.Title>
+                {eventsCreatable && (
+                    <CreateEventModal
+                        type={events[0] && isProfileEvent(events[0]) ? 'profile' : 'community'}
+                        id={id}
+                        onCreate={onCreate}
+                    />
+                )}
+            </Flex>
             {events.map((event) => (
                 <EventCard
                     event={event}

@@ -13,10 +13,10 @@ import {EventPreview} from "../EventPreview/EventPreview.tsx";
 type Props = {
     post: PostProfile | PostCommunity;
     fullPage?: boolean;
-    onPostUpdate: VoidFunction;
+    onLikesUpdate: (postId: string, likes: number) => void;
 }
 
-export const PostGeneric: FC<Props> = ({ post, fullPage, onPostUpdate }) => {
+export const PostGeneric: FC<Props> = ({ post, fullPage, onLikesUpdate }) => {
     const navigate = useNavigate();
 
     const handlePostClick = () => {
@@ -37,7 +37,7 @@ export const PostGeneric: FC<Props> = ({ post, fullPage, onPostUpdate }) => {
                 <PostImage postId={post.id} />
                 {post.event && <EventPreview event={post.event} clickable />}
                 <Divider className={styles.divider} />
-                <PostActions post={post} onPostUpdate={onPostUpdate} />
+                <PostActions post={post} onLikesUpdate={(likes) => onLikesUpdate(post.id, likes)} />
             </Flex>
         </Card>
     )

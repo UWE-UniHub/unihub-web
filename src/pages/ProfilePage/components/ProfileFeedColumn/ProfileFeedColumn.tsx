@@ -1,11 +1,12 @@
-import {FC} from "react";
+import {FC, useEffect, useState} from "react";
 import {EmptyFeed} from "../../../../components/EmptyFeed/EmptyFeed.tsx";
 import {EventProfile, ProfileById} from "../../../../types/domain.ts";
-import {useProfilePosts} from "../../../../queries/useProfilePosts.ts";
-import {Flex, Typography} from "antd";
-import {PostGeneric} from "../../../../components/PostGeneric/PostGeneric.tsx";
+import {App, Flex, Typography} from "antd";
 import {PostEditor} from "../../../../components/PostEditor/PostEditor.tsx";
 import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
+import {useFeed} from "../../../../stores/FeedStore.ts";
+import {profilesProfileIdPostsGet} from "../../../../api/profiles/profilesProfileIdPostsGet.ts";
+import {PostsFeed} from "../../../../components/PostsFeed/PostsFeed.tsx";
 
 type Props = {
     profile: ProfileById;
@@ -13,11 +14,41 @@ type Props = {
 }
 
 export const ProfileFeedColumn: FC<Props> = ({ profile, events }) => {
-    // FIXME fix to fit feed specs with limit and cursor (separate Feed component)
-    const { data: posts, refetch } = useProfilePosts(profile.id);
+    const { message } = App.useApp();
+    const { feed, addPosts, updateLikes, flushPosts } = useFeed('profile', profile.id);
+    const [loading, setLoading] = useState(false);
     const { profile: ownProfile } = useOwnProfile();
 
-    if(!posts?.length) {
+    const initFeed = () => {
+        flushPosts();
+        setLoading(true);
+        profilesProfileIdPostsGet(profile.id).then((f) => {
+            addPosts(f.results, f.next_page, f.count);
+        }).catch((e) => {
+            console.error(e);
+            void message.error(`Error loading the feed (${JSON.stringify(e)})`);
+        }).finally(() => setLoading(false));
+    }
+
+    const loadPosts = () => {
+        if(feed.posts.length >= feed.count) return;
+
+        setLoading(true);
+        return profilesProfileIdPostsGet(profile.id, feed.next).then((f) => {
+            addPosts(f.results, f.next_page, f.count);
+        }).catch((e) => {
+            console.error(e);
+            void message.error(`Error loading the feed (${JSON.stringify(e)})`);
+        }).finally(() => setLoading(false));
+    }
+
+    useEffect(() => {
+        if(!feed.next) {
+            initFeed();
+        }
+    }, [initFeed, feed]);
+
+    if(!feed.posts.length) {
         return (
             <EmptyFeed />
         );
@@ -30,10 +61,15 @@ export const ProfileFeedColumn: FC<Props> = ({ profile, events }) => {
                 <PostEditor
                     target={profile}
                     events={events}
-                    onPost={refetch}
+                    onPost={initFeed}
                 />
             )}
-            {posts.map((post) => <PostGeneric key={post.id} post={post} onPostUpdate={refetch} />)}
+            <PostsFeed
+                posts={feed.posts}
+                loading={loading}
+                onScroll={loadPosts}
+                onLikesUpdate={updateLikes}
+            />
         </Flex>
     )
 }

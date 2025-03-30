@@ -1,24 +1,51 @@
-import {FC} from "react";
-import {PostCommunity, PostProfile} from "../../../../types/domain.ts";
+import {FC, useEffect, useState} from "react";
 import {EmptyFeed} from "../../../../components/EmptyFeed/EmptyFeed.tsx";
-import {Flex} from "antd";
-import {PostGeneric} from "../../../../components/PostGeneric/PostGeneric.tsx";
+import {PostsFeed} from "../../../../components/PostsFeed/PostsFeed.tsx";
+import {useFeed} from "../../../../stores/FeedStore.ts";
+import {feedGet} from "../../../../api/posts/feedGet.ts";
+import {App} from "antd";
 
-type Props = {
-    posts: (PostProfile | PostCommunity)[];
-    onUpdate: VoidFunction;
-}
+export const FeedColumn: FC = () => {
+    const { message } = App.useApp();
+    const { feed, addPosts, updateLikes } = useFeed('main');
+    const [loading, setLoading] = useState(false);
 
-export const FeedColumn: FC<Props> = ({ posts, onUpdate }) => {
-    if(!posts?.length) {
+    const loadPosts = () => {
+        if(feed.posts.length >= feed.count) return;
+
+        setLoading(true);
+        return feedGet(feed.next).then((f) => {
+            addPosts(f.results, f.next_page, f.count);
+        }).catch((e) => {
+            console.error(e);
+            void message.error(`Error loading the feed (${JSON.stringify(e)})`);
+        }).finally(() => setLoading(false));
+    }
+
+    useEffect(() => {
+        if(!feed.next) {
+            setLoading(true);
+            feedGet().then((f) => {
+                addPosts(f.results, f.next_page, f.count);
+            }).catch((e) => {
+                console.error(e);
+                void message.error(`Error loading the feed (${JSON.stringify(e)})`);
+            }).finally(() => setLoading(false))
+        }
+    }, [feed]);
+
+    if(!feed.posts.length) {
         return (
             <EmptyFeed />
         );
     }
 
     return (
-        <Flex vertical gap={16}>
-            {posts.map((post) => <PostGeneric key={post.id} post={post} onPostUpdate={onUpdate} />)}
-        </Flex>
+        <PostsFeed
+            posts={feed.posts}
+            loading={loading}
+            onScroll={loadPosts}
+            onLikesUpdate={updateLikes}
+        />
     )
 }

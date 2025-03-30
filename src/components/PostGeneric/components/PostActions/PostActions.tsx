@@ -11,16 +11,16 @@ import {postsPostIdLikesDelete} from "../../../../api/posts/postsPostIdLikesDele
 
 type Props = {
     post: PostProfile | PostCommunity;
-    onPostUpdate: VoidFunction;
+    onLikesUpdate: (likes: number) => void;
 }
 
-export const PostActions: FC<Props> = ({ post, onPostUpdate }) => {
+export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
     const { message } = App.useApp();
     const { data: likes, refetch } = usePostLikes(post.id);
 
     const handleLike = () => {
         postsPostIdLikesPost(post.id).then(() => {
-            onPostUpdate();
+            onLikesUpdate(post.likes + 1);
             void refetch();
         }).catch((e) => {
             console.error(e);
@@ -30,7 +30,7 @@ export const PostActions: FC<Props> = ({ post, onPostUpdate }) => {
 
     const handleUnlike = () => {
         postsPostIdLikesDelete(post.id).then(() => {
-            onPostUpdate();
+            onLikesUpdate(post.likes - 1);
             void refetch();
         }).catch((e) => {
             console.error(e);

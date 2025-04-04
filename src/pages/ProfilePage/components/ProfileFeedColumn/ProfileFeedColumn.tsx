@@ -20,14 +20,16 @@ export const ProfileFeedColumn: FC<Props> = ({ profile, events }) => {
     const { profile: ownProfile } = useOwnProfile();
 
     const initFeed = () => {
-        flushPosts();
-        setLoading(true);
-        profilesProfileIdPostsGet(profile.id).then((f) => {
-            addPosts(f.results, f.next_page, f.count);
-        }).catch((e) => {
-            console.error(e);
-            void message.error(`Error loading the feed (${JSON.stringify(e)})`);
-        }).finally(() => setLoading(false));
+        setTimeout(() => {
+            setLoading(true);
+            profilesProfileIdPostsGet(profile.id).then((f) => {
+                flushPosts();
+                addPosts(f.results, f.next_page, f.count);
+            }).catch((e) => {
+                console.error(e);
+                void message.error(`Error loading the feed (${JSON.stringify(e)})`);
+            }).finally(() => setLoading(false));
+        })
     }
 
     const loadPosts = () => {

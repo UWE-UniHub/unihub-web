@@ -18,9 +18,9 @@ export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
     const [loading, setLoading] = useState(false);
 
     const initFeed = () => {
-        flushPosts();
         setLoading(true);
         communitiesCommunityIdPostsGet(community.id).then((f) => {
+            flushPosts();
             addPosts(f.results, f.next_page, f.count);
         }).catch((e) => {
             console.error(e);

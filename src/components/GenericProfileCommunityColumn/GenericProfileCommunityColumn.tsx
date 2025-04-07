@@ -14,6 +14,8 @@ type Props = GenericProfileCommunityProps & {
     onEdit: VoidFunction;
     onShowSubscribers?: VoidFunction;
     onShowSubscriptions?: VoidFunction;
+    eventsCreatable: boolean;
+    onEventCreate: VoidFunction;
 };
 
 export const GenericProfileCommunityColumn: FC<Props> = (props) => (
@@ -33,6 +35,11 @@ export const GenericProfileCommunityColumn: FC<Props> = (props) => (
             />
         )}
         {isGenericProfileProps(props) && <ProfileTypeCards profile={props.profile} />}
-        <EventsColumn events={props.events} />
+        <EventsColumn
+            id={isGenericProfileProps(props) ? props.profile.id : props.community.id}
+            events={props.events}
+            eventsCreatable={props.eventsCreatable}
+            onCreate={props.onEventCreate}
+        />
     </Flex>
 )

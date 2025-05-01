@@ -26,7 +26,7 @@ export const CommunityPage: FC = () => {
     const [subscribersOpen, setSubscribersOpen] = useState(false);
     const { data: subscribers } = useCommunityFollowers(communityId!, subscribersOpen);
 
-    const { data: events } = useCommunityEvents(communityId!);
+    const { data: events, refetch: refetchEvents } = useCommunityEvents(communityId!);
 
     return (
         <div className={styles.container}>
@@ -40,6 +40,8 @@ export const CommunityPage: FC = () => {
                     onEdit={() => setEditOpen(true)}
                     avatarVersion={avatarVersion}
                     onShowSubscribers={() => setSubscribersOpen(true)}
+                    eventsCreatable={community.is_admin}
+                    onEventCreate={refetchEvents}
                 />
             )}
             <div className={styles.feedColumnContainer}>

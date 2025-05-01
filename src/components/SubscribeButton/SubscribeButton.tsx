@@ -27,7 +27,6 @@ export const SubscribeButton: FC<Props> = ({ type, id, subscribed, onUpdate }) =
     const { refetch: refetchProfileFol } = useProfileFollowers(id, type === 'profile');
     const { refetch: refetchCommunityFol } = useCommunityFollowers(id, type === 'community');
 
-
     const handleSubscribe = () => {
         if(!profile) {
             return openModal('login');

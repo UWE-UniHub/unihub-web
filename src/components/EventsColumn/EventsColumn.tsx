@@ -45,7 +45,7 @@ export const EventsColumn: FC<Props> = ({ id, events, eventsCreatable, onCreate 
             )) : (
                 <Empty />
             )}
-            <EventModal event={eventModal} onClose={() => setEventModal(undefined)} />
+            <EventModal event={eventModal} onClose={() => setEventModal(undefined)} onUpdate={onCreate} />
         </Flex>
     )
 }

@@ -1,5 +1,5 @@
 import {PlusOutlined, PushpinOutlined} from "@ant-design/icons";
-import {App, Button, DatePicker, Form, FormProps, Input, Modal} from "antd";
+import {App, Button, DatePicker, Form, FormProps, Input, InputNumber, Modal} from "antd";
 import {FC, useState} from "react";
 import {EventPost} from "../../types/domain.ts";
 import dayjs from "dayjs";
@@ -77,6 +77,19 @@ export const CreateEventModal: FC<Props> = ({ type, id, onCreate }) => {
                         rules={[{ type: 'date', required: true }]}
                     >
                         <DatePicker disabledDate={(date) => date && date.isBefore(dayjs())} />
+                    </Form.Item>
+                    <Form.Item<EventPost>
+                        name="required_materials"
+                        label="Required materials"
+                    >
+                        <Input.TextArea rows={5} />
+                    </Form.Item>
+                    <Form.Item<EventPost>
+                        name="max_capacity"
+                        label="Max capacity"
+                        rules={[{ required: true, type: 'number' }]}
+                    >
+                        <InputNumber />
                     </Form.Item>
                 </Form>
             </Modal>

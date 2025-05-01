@@ -139,6 +139,11 @@ export interface EventGeneric {
   created_at: string;
   /** @format date-time */
   date: string;
+  /** Comma separated strings */
+  required_materials: string;
+  max_capacity: number;
+  subscribers_count: number;
+  is_subscribed: boolean;
 }
 
 export type EventProfile = EventGeneric & {
@@ -154,6 +159,9 @@ export interface EventPost {
   location: string;
   /** @format date-time */
   date: string;
+  /** Comma separated strings */
+  required_materials: string;
+  max_capacity: number;
 }
 
 export interface EventPatch {

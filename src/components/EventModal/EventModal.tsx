@@ -18,7 +18,12 @@ export const EventModal: FC<Props> = ({ event, onClose, onUpdate }) => (
         open={!!event}
         onCancel={onClose}
         footer={event && (
-            <EventSubscribeButton id={event.id} subscribed={event.is_subscribed} onUpdate={onUpdate} />
+            <EventSubscribeButton
+                id={event.id}
+                subscribed={event.is_subscribed}
+                subscribers={event.subscribers_count}
+                onUpdate={onUpdate}
+            />
         )}
         destroyOnClose
         width={600}

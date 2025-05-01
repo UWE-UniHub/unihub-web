@@ -9,10 +9,11 @@ import {BellOutlined} from "@ant-design/icons";
 type Props = {
     id: string;
     subscribed: boolean;
+    subscribers: number;
     onUpdate: VoidFunction;
 }
 
-export const EventSubscribeButton: FC<Props> = ({ id, subscribed, onUpdate }) => {
+export const EventSubscribeButton: FC<Props> = ({ id, subscribed, subscribers, onUpdate }) => {
     const { profile } = useOwnProfile();
     const { openModal } = useAuthModal();
     const { message } = App.useApp();
@@ -50,7 +51,7 @@ export const EventSubscribeButton: FC<Props> = ({ id, subscribed, onUpdate }) =>
                 icon={<BellOutlined />}
                 loading={loading}
                 onClick={handleUnsubscribe}
-            >Not interested</Button>
+            >Not interested ({subscribers})</Button>
         )
     }
 
@@ -60,6 +61,6 @@ export const EventSubscribeButton: FC<Props> = ({ id, subscribed, onUpdate }) =>
             type="primary"
             loading={loading}
             onClick={handleSubscribe}
-        >Interested</Button>
+        >Interested ({subscribers})</Button>
     )
 }

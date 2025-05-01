@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from "react";
 import {EventCommunity, EventProfile} from "../../types/domain.ts";
-import {Flex, Typography} from "antd";
+import {Empty, Flex, Typography} from "antd";
 import {EventCard} from "../EventCard/EventCard.tsx";
 import {EventModal} from "../EventModal/EventModal.tsx";
 import {useSearchParams} from "react-router";
@@ -24,10 +24,6 @@ export const EventsColumn: FC<Props> = ({ id, events, eventsCreatable, onCreate 
         }
     }, [searchParams, events]);
 
-    if(!events.length) {
-        return null;
-    }
-
     return (
         <Flex vertical gap={16}>
             <Flex align="center" justify="space-between">
@@ -40,13 +36,15 @@ export const EventsColumn: FC<Props> = ({ id, events, eventsCreatable, onCreate 
                     />
                 )}
             </Flex>
-            {events.map((event) => (
+            {events.length ? events.map((event) => (
                 <EventCard
                     event={event}
                     key={event.id}
                     onClick={() => setEventModal(event)}
                 />
-            ))}
+            )) : (
+                <Empty />
+            )}
             <EventModal event={eventModal} onClose={() => setEventModal(undefined)} />
         </Flex>
     )

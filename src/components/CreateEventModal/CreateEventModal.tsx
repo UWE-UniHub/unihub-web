@@ -39,6 +39,7 @@ export const CreateEventModal: FC<Props> = ({ type, id, onCreate }) => {
                 type="primary"
                 size="small"
                 icon={<PlusOutlined />}
+                onClick={() => setOpen(true)}
             >Add event</Button>
             <Modal
                 title="Create event"

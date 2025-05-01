@@ -30,7 +30,7 @@ export const EventsColumn: FC<Props> = ({ id, events, eventsCreatable, onCreate 
 
     return (
         <Flex vertical gap={16}>
-            <Flex align="center">
+            <Flex align="center" justify="space-between">
                 <Typography.Title level={4}>Events</Typography.Title>
                 {eventsCreatable && (
                     <CreateEventModal

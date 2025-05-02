@@ -9,6 +9,8 @@ import {PostActions} from "./components/PostActions/PostActions.tsx";
 import {useNavigate} from "react-router";
 import {PostImage} from "./components/PostImage/PostImage.tsx";
 import {EventPreview} from "../EventPreview/EventPreview.tsx";
+import {LockOutlined, TagOutlined} from "@ant-design/icons";
+import {capitalizeFirstLetter} from "../../utils/capitalizeFirstLetter.ts";
 
 type Props = {
     post: PostProfile | PostCommunity;
@@ -36,6 +38,22 @@ export const PostGeneric: FC<Props> = ({ post, fullPage, onLikesUpdate }) => {
                 >{post.content}</Typography.Paragraph>
                 <PostImage postId={post.id} />
                 {post.event && <EventPreview event={post.event} clickable />}
+                {post.hidden && (
+                    <Typography.Text type="secondary">
+                        <Flex gap={4}>
+                            <LockOutlined />
+                            Only visible to subscribers
+                        </Flex>
+                    </Typography.Text>
+                )}
+                {post.tags && (
+                    <Typography.Text type="secondary">
+                        <Flex gap={4}>
+                            <TagOutlined />
+                            {post.tags?.split(',').map(capitalizeFirstLetter).join(', ')}
+                        </Flex>
+                    </Typography.Text>
+                )}
                 <Divider className={styles.divider} />
                 <PostActions post={post} onLikesUpdate={(likes) => onLikesUpdate(post.id, likes)} />
             </Flex>

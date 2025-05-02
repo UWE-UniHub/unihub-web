@@ -1,6 +1,6 @@
 import {FC, useRef, useState} from "react";
 import {Community, EventCommunity, EventProfile, Profile} from "../../types/domain.ts";
-import {App, Button, Flex, Input} from "antd";
+import {App, Button, Checkbox, Flex, Input} from "antd";
 import {isCommunityTarget, isProfileTarget} from "./utils.ts";
 import {ProfileAvatar} from "../ProfileAvatar/ProfileAvatar.tsx";
 import {CommunityAvatar} from "../CommunityAvatar/CommunityAvatar.tsx";
@@ -15,6 +15,7 @@ import {profilesProfileIdPostsPost} from "../../api/profiles/profilesProfileIdPo
 import {communitiesCommunityIdPostsPost} from "../../api/communities/communitiesCommunityIdPostsPost.ts";
 import {postsPostIdImgPut} from "../../api/posts/postsPostIdImgPut.ts";
 import {EventPreview} from "../EventPreview/EventPreview.tsx";
+import {TagsPopover} from "./components/TagsPopover/TagsPopover.tsx";
 
 type Props = {
     target: Community | Profile;
@@ -53,6 +54,8 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
     }
 
     const [eventId, setEventId] = useState<string | undefined>(undefined);
+    const [hidden, setHidden] = useState(false);
+    const [tags, setTags] = useState<string>();
 
     const handleCancel = () => {
         setFocused(false);
@@ -70,7 +73,9 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
                 communitiesCommunityIdPostsPost
             )(target.id, {
                 content,
-                event_id: eventId || null
+                event_id: eventId || null,
+                hidden,
+                tags: tags || null
             });
 
             if(image) {
@@ -118,6 +123,14 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
                                     eventId={eventId}
                                     setEventId={setEventId}
                                 />
+                                <TagsPopover
+                                    value={tags}
+                                    onChange={setTags}
+                                />
+                                <Checkbox
+                                    checked={hidden}
+                                    onChange={({ target }) => setHidden(target.checked)}
+                                >Only for subscribers</Checkbox>
                             </Flex>
                             <Flex align="center" gap={8}>
                                 <Button

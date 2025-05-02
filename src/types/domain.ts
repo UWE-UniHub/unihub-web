@@ -109,6 +109,9 @@ export interface PostGeneric {
   event?: EventProfile | EventCommunity;
   likes: number;
   is_liked: boolean;
+  hidden: boolean;
+  /** Comma-separated string */
+  tags: string | null;
 }
 
 export type PostProfile = PostGeneric & {
@@ -141,12 +144,17 @@ export interface PostPost {
   content: string;
   /** @format uuid */
   event_id: string | null;
+  hidden: boolean;
+  tags: string | null;
 }
 
 export interface PostPatch {
   content?: string;
   /** @format uuid */
   event_id?: string | null;
+  hidden?: boolean;
+  /** Comma-separated string */
+  tags?: string | null;
 }
 
 export interface EventGeneric {

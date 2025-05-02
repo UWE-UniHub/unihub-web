@@ -41,7 +41,7 @@ export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
     }
 
     useEffect(() => {
-        if(!feed.next) {
+        if(!feed.posts.length) {
             initFeed();
         }
     }, [initFeed, feed]);

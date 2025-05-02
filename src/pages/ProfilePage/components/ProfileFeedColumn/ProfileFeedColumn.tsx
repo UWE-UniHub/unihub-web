@@ -45,7 +45,7 @@ export const ProfileFeedColumn: FC<Props> = ({ profile, events }) => {
     }
 
     useEffect(() => {
-        if(!feed.next) {
+        if(!feed.posts.length) {
             initFeed();
         }
     }, [initFeed, feed]);

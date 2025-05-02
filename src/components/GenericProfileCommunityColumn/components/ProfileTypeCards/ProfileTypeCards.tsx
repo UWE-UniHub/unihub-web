@@ -15,7 +15,7 @@ export const ProfileTypeCards: FC<Props> = ({ profile }) => {
 
     if(profile.is_staff) {
         return (
-            <Flex gap={4}>
+            <Flex vertical gap={4}>
                 <Card
                     className={styles.cardItem}
                     classNames={{ body: styles.cardItemBody }}
@@ -25,24 +25,26 @@ export const ProfileTypeCards: FC<Props> = ({ profile }) => {
                         value={dayjs(profile.date_of_birth).format('DDD MMMM YYYY')}
                     />
                 </Card>
-                <Card
-                    className={styles.cardItem}
-                    classNames={{ body: styles.cardItemBody }}
-                >
-                    <Statistic
-                        title="Position"
-                        value={profile.staff?.position}
-                    />
-                </Card>
-                <Card
-                    className={styles.cardItem}
-                    classNames={{ body: styles.cardItemBody }}
-                >
-                    <Statistic
-                        title="Department"
-                        value={profile.staff?.department}
-                    />
-                </Card>
+                <Flex gap={4}>
+                    <Card
+                        className={styles.cardItem}
+                        classNames={{ body: styles.cardItemBody }}
+                    >
+                        <Statistic
+                            title="Position"
+                            value={profile.staff?.position}
+                        />
+                    </Card>
+                    <Card
+                        className={styles.cardItem}
+                        classNames={{ body: styles.cardItemBody }}
+                    >
+                        <Statistic
+                            title="Department"
+                            value={profile.staff?.department}
+                        />
+                    </Card>
+                </Flex>
                 <Card
                     className={styles.cardItem}
                     classNames={{ body: styles.cardItemBody }}

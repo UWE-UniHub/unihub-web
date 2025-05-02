@@ -5,6 +5,7 @@ import styles from './PostCommunityCard.module.css';
 import {CommunityAvatar} from "../../../../components/CommunityAvatar/CommunityAvatar.tsx";
 import {SubscribeButton} from "../../../../components/SubscribeButton/SubscribeButton.tsx";
 import {useCommunityById} from "../../../../queries/useCommunityById.ts";
+import {Link} from "react-router";
 
 type Props = {
     community: Community;
@@ -20,7 +21,9 @@ export const PostCommunityCard: FC<Props> = ({ community }) => {
                 <Flex gap={16} align="center">
                     <CommunityAvatar community={community} version={0} size={64} />
                     <Flex vertical>
-                        <Typography.Title level={5}>{community.name}</Typography.Title>
+                        <Link to={`/community/${community.id}`}>
+                            <Typography.Title level={5}>{community.name}</Typography.Title>
+                        </Link>
                         <Typography.Paragraph className={styles.bio} ellipsis={{ rows: 2 }}>{community.bio}</Typography.Paragraph>
                     </Flex>
                 </Flex>

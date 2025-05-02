@@ -2,6 +2,7 @@ import {FC} from "react";
 import {Profile} from "../../types/domain.ts";
 import {List, Modal} from "antd";
 import {ProfileAvatar} from "../ProfileAvatar/ProfileAvatar.tsx";
+import {Link} from "react-router";
 
 type Props = {
     title: string;
@@ -23,7 +24,7 @@ export const ProfilesListModal: FC<Props> = ({ title, profiles, open, onClose })
                 <List.Item>
                     <List.Item.Meta
                         avatar={<ProfileAvatar profile={item} version={0} />}
-                        title={`${item.first_name} ${item.last_name}`}
+                        title={<Link to={`/profile/${item.id}`}>{item.first_name} {item.last_name}</Link>}
                         description={item.bio}
                     />
                 </List.Item>

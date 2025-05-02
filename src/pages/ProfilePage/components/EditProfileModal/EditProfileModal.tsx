@@ -1,5 +1,5 @@
 import {FC, useState} from "react";
-import {App, Button, Flex, Form, FormProps, Input, Modal, Upload, UploadProps} from "antd";
+import {App, Button, DatePicker, Flex, Form, FormProps, Input, Modal, Upload, UploadProps} from "antd";
 import {ExclamationCircleOutlined} from "@ant-design/icons";
 import {ProfilePatch} from "../../../../types/domain.ts";
 import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
@@ -11,6 +11,8 @@ import {profilesProfileIdPatch} from "../../../../api/profiles/profilesProfileId
 import {profilesProfileIdDelete} from "../../../../api/profiles/profilesProfileIdDelete.ts";
 import {useAuthModal} from "../../../../components/LayoutWrapper/useAuthModal.ts";
 import {AvatarUploadContent} from "../../../../components/AvatarUploadContent/AvatarUploadContent.tsx";
+import dayjs, {Dayjs} from "dayjs";
+import {InterestTagsSelect} from "../../../../components/InterestTagsSelect/InterestTagsSelect.tsx";
 
 type Props = {
     open: boolean;
@@ -121,7 +123,11 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                 initialValues={{
                     first_name: profile?.first_name,
                     last_name: profile?.last_name,
-                    bio: profile?.bio
+                    bio: profile?.bio,
+                    email: profile?.email,
+                    address: profile?.address,
+                    date_of_birth: profile?.date_of_birth ? dayjs(profile.date_of_birth) : undefined,
+                    interests: profile?.interests
                 }}
                 onFinish={handleEdit}
             >
@@ -146,6 +152,13 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                         loading={avatarLoading}
                     >Delete avatar</Button>
                 </Flex>
+                <Form.Item<ProfilePatch>
+                    name="email"
+                    label="Email"
+                    rules={[{ type: 'email' }]}
+                >
+                    <Input />
+                </Form.Item>
                 <Flex gap={16}>
                     <Form.Item<ProfilePatch>
                         name="first_name"
@@ -165,6 +178,33 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                     label="Bio"
                 >
                     <Input.TextArea rows={3} />
+                </Form.Item>
+                <Form.Item<ProfilePatch>
+                    name="address"
+                    label="Address"
+                >
+                    <Input.TextArea rows={3} />
+                </Form.Item>
+                <Form.Item<ProfilePatch>
+                    name="date_of_birth"
+                    label="Date of Birth"
+                    rules={[{
+                        type: 'date',
+                        validator: (_, value: Dayjs) => {
+                            if(dayjs().year() - value.year() < 13) {
+                                return Promise.reject('You must be 13 or older');
+                            }
+                            return Promise.resolve();
+                        }
+                    }]}
+                >
+                    <DatePicker />
+                </Form.Item>
+                <Form.Item<ProfilePatch>
+                    name="interests"
+                    label="Interests"
+                >
+                    <InterestTagsSelect />
                 </Form.Item>
             </Form>
         </Modal>

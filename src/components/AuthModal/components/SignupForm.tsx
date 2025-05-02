@@ -1,11 +1,12 @@
 import {FC} from "react";
-import {Flex, Form, FormInstance, FormProps, Input, InputNumber, Select} from "antd";
+import {DatePicker, Flex, Form, FormInstance, FormProps, Input, InputNumber, Select} from "antd";
 import {SignupPost} from "../../../types/domain.ts";
 import {COMMON_FORM_PROPS} from "../constants.ts";
 import {ProfileTypeSegmented} from "./ProfileTypeSegmented.tsx";
-import { useLevels } from "../../../queries/useLevels.ts";
 import { useSchools } from "../../../queries/useSchools";
 import { useDepartments } from "../../../queries/useDepartments";
+import dayjs, {Dayjs} from "dayjs";
+import {InterestTagsSelect} from "../../InterestTagsSelect/InterestTagsSelect.tsx";
 
 export type SignupFormType = SignupPost & {
     repeat_password: string;
@@ -19,7 +20,6 @@ type Props = {
 export const SignupForm: FC<Props> = ({ form, onFinish }) => {
     const isStaff = Form.useWatch('is_staff', form);
 
-    const { data: levelsData} = useLevels();
     const { data: schoolsData} = useSchools();
     const { data: departmentsData} = useDepartments();
 
@@ -50,6 +50,17 @@ export const SignupForm: FC<Props> = ({ form, onFinish }) => {
             >
                 <InputNumber style={{ width: '100%' }} controls={false} />
             </Form.Item>
+            <Form.Item<SignupFormType>
+                name="email"
+                label="Email"
+                rules={[{
+                    required: true,
+                    whitespace: true,
+                    type: 'email'
+                }]}
+            >
+                <Input />
+            </Form.Item>
             <Form.Item<SignupFormType> label='Name'>
                 <Flex gap={16}>
                     <Form.Item<SignupFormType>
@@ -69,6 +80,39 @@ export const SignupForm: FC<Props> = ({ form, onFinish }) => {
                         <Input placeholder="Doe" />
                     </Form.Item>
                 </Flex>
+            </Form.Item>
+            <Form.Item<SignupFormType>
+                name="address"
+                label="Address"
+                rules={[{
+                    type: 'string',
+                    required: true,
+                    whitespace: true
+                }]}
+            >
+                <Input.TextArea rows={3} />
+            </Form.Item>
+            <Form.Item<SignupFormType>
+                name="date_of_birth"
+                label="Date of Birth"
+                rules={[{
+                    type: 'date',
+                    required: true,
+                    validator: (_, value: Dayjs) => {
+                        if(dayjs().year() - value.year() < 13) {
+                            return Promise.reject('You must be 13 or older to signup');
+                        }
+                        return Promise.resolve();
+                    }
+                }]}
+            >
+                <DatePicker />
+            </Form.Item>
+            <Form.Item<SignupFormType>
+                name="interests"
+                label="Interests"
+            >
+                <InterestTagsSelect />
             </Form.Item>
             <Form.Item<SignupFormType>
                 name="is_staff"
@@ -104,11 +148,11 @@ export const SignupForm: FC<Props> = ({ form, onFinish }) => {
                         <Input />
                     </Form.Item>
                     <Form.Item<SignupFormType>
-                        name={['student', 'level']}
-                        label="Level"
-                        rules={[{ type: "string", required: true, whitespace: true }]}
+                        name={['student', 'year']}
+                        label="Year"
+                        rules={[{ type: "number", required: true }]}
                     >
-                        <Select options={levelsData?.levels.map((lvl) => ({ value: lvl, label: lvl }))}  />
+                        <InputNumber min={1} max={4} />
                     </Form.Item>
                     <Form.Item<SignupFormType>
                         name={['student', 'school']}

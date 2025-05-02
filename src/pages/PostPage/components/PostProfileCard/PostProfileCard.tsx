@@ -6,6 +6,7 @@ import styles from './PostProfileCard.module.css';
 import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
 import {SubscribeButton} from "../../../../components/SubscribeButton/SubscribeButton.tsx";
 import {useProfileById} from "../../../../queries/useProfileById.ts";
+import {Link} from "react-router";
 
 type Props = {
     profile: Profile;
@@ -22,7 +23,9 @@ export const PostProfileCard: FC<Props> = ({ profile }) => {
                 <Flex gap={16} align="center">
                     <ProfileAvatar profile={profile} version={0} size={64} />
                     <Flex vertical>
-                        <Typography.Title level={5}>{profile.first_name} {profile.last_name}</Typography.Title>
+                        <Link to={`/profile/${profile.id}`}>
+                            <Typography.Title level={5}>{profile.first_name} {profile.last_name}</Typography.Title>
+                        </Link>
                         <Typography.Paragraph className={styles.bio} ellipsis={{ rows: 2 }}>{profile.bio}</Typography.Paragraph>
                     </Flex>
                 </Flex>

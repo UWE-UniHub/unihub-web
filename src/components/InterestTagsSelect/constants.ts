@@ -1,0 +1,22 @@
+export const INTERESTS = [
+    { label: "Swimming", value: "swimming" },
+    { label: "Reading", value: "reading" },
+    { label: "Traveling", value: "traveling" },
+    { label: "Cooking", value: "cooking" },
+    { label: "Hiking", value: "hiking" },
+    { label: "Photography", value: "photography" },
+    { label: "Gardening", value: "gardening" },
+    { label: "Painting", value: "painting" },
+    { label: "Cycling", value: "cycling" },
+    { label: "Writing", value: "writing" },
+    { label: "Dancing", value: "dancing" },
+    { label: "Fishing", value: "fishing" },
+    { label: "Skiing", value: "skiing" },
+    { label: "Knitting", value: "knitting" },
+    { label: "Yoga", value: "yoga" },
+    { label: "Running", value: "running" },
+    { label: "Gaming", value: "gaming" },
+    { label: "Drawing", value: "drawing" },
+    { label: "Singing", value: "singing" },
+    { label: "Baking", value: "baking" }
+];

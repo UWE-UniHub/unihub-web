@@ -1,6 +1,6 @@
 import {FC, useState} from "react";
 import {PostCommunity, PostProfile} from "../../../../types/domain.ts";
-import {App, Avatar, Button, Flex, Popover, Tooltip} from "antd";
+import {App, Avatar, Button, ButtonProps, Flex, Popover, Tooltip} from "antd";
 import {LikeOutlined} from "@ant-design/icons";
 import styles from './PostActions.module.css';
 import {usePostLikes} from "../../../../queries/usePostLikes.ts";
@@ -18,7 +18,8 @@ export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
     const { message } = App.useApp();
     const { data: likes, refetch } = usePostLikes(post.id);
 
-    const handleLike = () => {
+    const handleLike: ButtonProps['onClick'] = (e) => {
+        e.stopPropagation();
         postsPostIdLikesPost(post.id).then(() => {
             onLikesUpdate(post.likes + 1);
             void refetch();
@@ -28,7 +29,8 @@ export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
         })
     }
 
-    const handleUnlike = () => {
+    const handleUnlike: ButtonProps['onClick'] = (e) => {
+        e.stopPropagation();
         postsPostIdLikesDelete(post.id).then(() => {
             onLikesUpdate(post.likes - 1);
             void refetch();

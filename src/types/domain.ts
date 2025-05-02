@@ -11,17 +11,23 @@
 
 export interface SignupPost {
   id: number;
+  email: string;
   password: string;
   first_name: string;
   last_name: string;
   is_staff: boolean;
   student: ProfileStudentInfo | null;
   staff: ProfileStaffInfo | null;
+  address: string;
+  /** @format date-time */
+  date_of_birth: string;
+  /** Comma-separated strings */
+  interests: string;
 }
 
 export interface ProfileStudentInfo {
   program: string;
-  level: string;
+  year: number;
   school: string;
 }
 
@@ -32,6 +38,7 @@ export interface ProfileStaffInfo {
 
 export interface Profile {
   id: string;
+  email: string;
   first_name: string;
   last_name: string;
   is_staff?: boolean;
@@ -40,6 +47,12 @@ export interface Profile {
   subscriptions: number;
   student: ProfileStudentInfo | null;
   staff: ProfileStaffInfo | null;
+  /** Only shown for own profile */
+  address: string | null;
+  /** @format date-time */
+  date_of_birth: string;
+  /** Comma-separated strings */
+  interests: string;
 }
 
 export type ProfileById = Profile & {
@@ -50,6 +63,12 @@ export interface ProfilePatch {
   first_name?: string;
   last_name?: string;
   bio?: string | null;
+  email?: string;
+  address?: string;
+  /** @format date-time */
+  date_of_birth?: string;
+  /** Comma-separated strings */
+  interests?: string;
 }
 
 export interface Community {

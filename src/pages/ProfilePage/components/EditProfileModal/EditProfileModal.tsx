@@ -20,6 +20,10 @@ type Props = {
     onUpdate: VoidFunction;
 }
 
+type FormType = Omit<ProfilePatch, 'date_of_birth'> & {
+    date_of_birth: Dayjs;
+}
+
 export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
     const { message } = App.useApp();
     const { profile } = useOwnProfile();
@@ -55,10 +59,10 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
     }
 
     const [loading, setLoading] = useState(false);
-    const handleEdit: FormProps<ProfilePatch>['onFinish'] = (values) => {
+    const handleEdit: FormProps<FormType>['onFinish'] = ({ date_of_birth, ...values }) => {
         if(!form.isFieldsTouched()) return onClose();
         setLoading(true);
-        profilesProfileIdPatch(profile!.id, values).then(() => {
+        profilesProfileIdPatch(profile!.id, { ...values, date_of_birth: date_of_birth.format('YYYY-MM-DD') }).then(() => {
             void message.success('Success');
             checkAuth();
             onUpdate();
@@ -116,7 +120,7 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                 </Flex>
             )}
         >
-            <Form<ProfilePatch>
+            <Form<FormType>
                 form={form}
                 layout="vertical"
                 preserve={false}
@@ -152,7 +156,7 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                         loading={avatarLoading}
                     >Delete avatar</Button>
                 </Flex>
-                <Form.Item<ProfilePatch>
+                <Form.Item<FormType>
                     name="email"
                     label="Email"
                     rules={[{ type: 'email' }]}
@@ -160,32 +164,32 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                     <Input />
                 </Form.Item>
                 <Flex gap={16}>
-                    <Form.Item<ProfilePatch>
+                    <Form.Item<FormType>
                         name="first_name"
                         label="First name"
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item<ProfilePatch>
+                    <Form.Item<FormType>
                         name="last_name"
                         label="Last name"
                     >
                         <Input />
                     </Form.Item>
                 </Flex>
-                <Form.Item<ProfilePatch>
+                <Form.Item<FormType>
                     name="bio"
                     label="Bio"
                 >
                     <Input.TextArea rows={3} />
                 </Form.Item>
-                <Form.Item<ProfilePatch>
+                <Form.Item<FormType>
                     name="address"
                     label="Address"
                 >
                     <Input.TextArea rows={3} />
                 </Form.Item>
-                <Form.Item<ProfilePatch>
+                <Form.Item<FormType>
                     name="date_of_birth"
                     label="Date of Birth"
                     rules={[{
@@ -200,7 +204,7 @@ export const EditProfileModal: FC<Props> = ({ open, onClose, onUpdate }) => {
                 >
                     <DatePicker />
                 </Form.Item>
-                <Form.Item<ProfilePatch>
+                <Form.Item<FormType>
                     name="interests"
                     label="Interests"
                 >

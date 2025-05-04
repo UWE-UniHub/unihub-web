@@ -92,6 +92,7 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
             setLoading(false);
         }
     }
+    const [showPreview, setShowPreview] = useState(false);
 
     return (
         <Flex align="flex-start" gap={16}>
@@ -112,7 +113,14 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
                                 className={styles.image}
                                 alt="preview"
                                 src={imagePreview}
+                                onClick={() => setShowPreview(true)}
+                                style={{ cursor: 'pointer' }}
                             />
+                        )}
+                        {showPreview && (
+                            <div className={styles.imageModal} onClick={() => setShowPreview(false)}>
+                                <img src={imagePreview} className={styles.imageFullscreen} alt="preview" />
+                            </div>
                         )}
                         {eventId && <EventPreview event={events.find((event) => event.id === eventId)!} />}
                         <Flex align="center" justify="space-between">

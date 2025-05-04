@@ -16,6 +16,7 @@ import {communitiesCommunityIdPostsPost} from "../../api/communities/communities
 import {postsPostIdImgPut} from "../../api/posts/postsPostIdImgPut.ts";
 import {EventPreview} from "../EventPreview/EventPreview.tsx";
 import {TagsPopover} from "./components/TagsPopover/TagsPopover.tsx";
+import { Image } from 'antd';
 
 type Props = {
     target: Community | Profile;
@@ -92,6 +93,7 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
             setLoading(false);
         }
     }
+    
 
     return (
         <Flex align="flex-start" gap={16}>
@@ -108,12 +110,14 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
                     />
                     <Flex vertical gap={8} className={styles.textareaActions}>
                         {imagePreview && (
-                            <img
-                                className={styles.image}
-                                alt="preview"
+                            <Image
                                 src={imagePreview}
+                                alt="preview"
+                                className={styles.image}
+                                preview={{ mask: null}}
                             />
                         )}
+
                         {eventId && <EventPreview event={events.find((event) => event.id === eventId)!} />}
                         <Flex align="center" justify="space-between">
                             <Flex align="center" gap={8}>

@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useState, useEffect} from "react";
 import styles from './ProfilePage.module.css';
 import {ProfileFeedColumn} from "./components/ProfileFeedColumn/ProfileFeedColumn.tsx";
 import {
@@ -34,7 +34,23 @@ export const ProfilePage: FC = () => {
 
     const { data: events, refetch: refetchEvents } = useProfileEvents(profileId!);
 
+    const [showScroll, setShowScroll] = useState(false);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        const handleScroll = () => {
+            setShowScroll(window.scrollY > 300);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
     return (
+        <>
         <div className={styles.container}>
             <Spin spinning={!profile} fullscreen />
             {profile && events && (
@@ -74,5 +90,11 @@ export const ProfilePage: FC = () => {
                 onClose={() => setSubscriptionsOpen(false)}
             />
         </div>
-    )
+        {showScroll && (
+            <button onClick={scrollToTop} className={styles.scrollTopBtn}>
+              <span className={styles.upText}>Up⇡</span>
+            </button>
+        )}
+    </>
+    );
 }

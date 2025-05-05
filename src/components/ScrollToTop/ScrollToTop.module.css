@@ -2,7 +2,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100px;
+    width: 150px;
     height: 100vh;
     cursor: pointer;
     background-color: transparent;
@@ -20,14 +20,12 @@
 .upButton:hover {
     background-color: rgba(0, 0, 0, 0.03);
 }
+
 .upText {
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.2);
     transition: color 0.3s ease;
-    user-select: none;
-    font-weight: bold;
 }
   
-.leftScrollZone:hover .upText {
-    color: rgba(0, 0, 0, 0.4);
+.upButton:hover .upText {
+    /*noinspection CssUnresolvedCustomProperty*/
+    color: var(--ant-color-text-secondary);
 }

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./ScrollToTop.module.css";
+import {Typography} from "antd";
+import {UpOutlined} from "@ant-design/icons";
 
 export const ScrollToTop = () => {
     const [visible, setVisible] = useState(false);
@@ -20,7 +22,9 @@ export const ScrollToTop = () => {
 
     return (
         <div className={styles.upButton} onClick={scrollToTop}>
-            <span className={styles.upText}>Up⇡</span>
+            <Typography.Text type="secondary" className={styles.upText} strong>
+                <UpOutlined /> Scroll to Top
+            </Typography.Text>
         </div>
     );
 };

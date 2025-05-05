@@ -120,7 +120,7 @@ export const SearchBar: FC = () => {
 
     return (
         <Dropdown
-            menu={{ items: loading ? LOADING_ITEMS : itemsOrEmpty }}
+            menu={{ items: loading ? LOADING_ITEMS : itemsOrEmpty, style: { width: '500px' } }}
             open={Boolean(value.length)}
             overlayClassName={styles.dropdown}
         >
@@ -132,6 +132,7 @@ export const SearchBar: FC = () => {
                         className={styles.searchBar}
                         value={value}
                         onChange={handleChange}
+                        onBlur={() => setTimeout(() => setValue(''), 100)}
                     />
             </ConfigProvider>
         </Dropdown>

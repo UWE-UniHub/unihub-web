@@ -21,7 +21,7 @@ export const SearchEventItem: FC<Props> = ({ event }) => (
             ) : (
                 <ProfileAvatar profile={event.profile} version={0} />
             )}
-            <Flex vertical>
+            <Flex vertical style={{ minWidth: 0 }}>
                 <Typography.Text>
                     {isCommunityEvent(event) ? event.community.name : `${event.profile.first_name} ${event.profile.last_name}`}
                 </Typography.Text>

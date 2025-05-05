@@ -6,3 +6,7 @@
 .dropdown {
     width: 500px !important;
 }
+
+.dropdown :global(.ant-dropdown-menu-title-content) {
+    min-width: 0;
+}

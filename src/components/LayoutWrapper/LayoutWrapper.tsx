@@ -9,6 +9,7 @@ import {AuthModal, AuthModalState} from "../AuthModal/AuthModal.tsx";
 import {AuthModalProvider} from "./useAuthModal.ts";
 import {authDelete} from "../../api/auth/authDelete.ts";
 import {ProfileAvatar} from "../ProfileAvatar/ProfileAvatar.tsx";
+import { ScrollToTop } from "../ScrollToTop/ScrollToTop";
 
 export const LayoutWrapper: FC = () => {
     const { token } = theme.useToken();
@@ -52,6 +53,7 @@ export const LayoutWrapper: FC = () => {
     }), [profile, checkAuth]);
 
     return (
+        <>
         <Layout className={styles.layout}>
             <Layout.Header>
                 <Flex align="center" justify="space-between" className={styles.layoutHeader}>
@@ -134,5 +136,7 @@ export const LayoutWrapper: FC = () => {
                 </AuthModalProvider>
             </Layout.Content>
         </Layout>
-    )
+        <ScrollToTop />
+    </>
+    );
 }

@@ -12,7 +12,7 @@ export const SearchProfileItem: FC<Props> = ({ profile }) => (
     <Link to={`/profile/${profile.id}`}>
         <Flex align="center" gap={8}>
             <ProfileAvatar profile={profile} version={0} />
-            <Flex vertical>
+            <Flex vertical style={{ minWidth: 0 }}>
                 <Typography.Text>{profile.first_name} {profile.last_name}</Typography.Text>
                 <Typography.Text type="secondary" ellipsis>{profile.bio}</Typography.Text>
             </Flex>

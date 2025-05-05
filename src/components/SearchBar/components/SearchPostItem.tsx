@@ -20,7 +20,7 @@ export const SearchPostItem: FC<Props> = ({ post }) => (
             ) : (
                 <ProfileAvatar profile={post.profile} version={0} />
             )}
-            <Flex vertical>
+            <Flex vertical style={{ minWidth: 0 }}>
                 <Typography.Text>
                     {isCommunityPost(post) ? post.community.name : `${post.profile.first_name} ${post.profile.last_name}`}
                 </Typography.Text>

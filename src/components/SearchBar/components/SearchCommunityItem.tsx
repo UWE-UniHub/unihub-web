@@ -12,7 +12,7 @@ export const SearchCommunityItem: FC<Props> = ({ community }) => (
     <Link to={`/community/${community.id}`}>
         <Flex align="center" gap={8}>
             <CommunityAvatar community={community} version={0} />
-            <Flex vertical>
+            <Flex vertical style={{ minWidth: 0 }}>
                 <Typography.Text>{community.name}</Typography.Text>
                 <Typography.Text type="secondary" ellipsis>{community.bio}</Typography.Text>
             </Flex>

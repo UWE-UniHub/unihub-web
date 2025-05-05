@@ -1,0 +1,8 @@
+.searchBar {
+    width: 300px;
+    border: 1px solid var(--ant-color-text-tertiary);
+}
+
+.dropdown {
+    width: 500px !important;
+}

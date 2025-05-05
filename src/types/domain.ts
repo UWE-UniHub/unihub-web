@@ -214,3 +214,10 @@ export interface Schools {
 export interface Departments {
   departments: string[];
 }
+
+export interface SearchResult {
+  profiles: Profile[];
+  communities: Community[];
+  posts: (PostProfile | PostCommunity)[];
+  events: (EventProfile | EventCommunity)[];
+}

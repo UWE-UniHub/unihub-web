@@ -5,6 +5,7 @@ import {ProfileAvatar} from "../../../../components/ProfileAvatar/ProfileAvatar.
 import styles from './WidgetColumn.module.css'
 import {useNavigate} from "react-router";
 import {useAuthModal} from "../../../../components/LayoutWrapper/useAuthModal.ts";
+import { StickySidebar } from "../../../../components/StickySidebar/StickySidebar";
 
 export const WidgetColumn: FC = () => {
     const { profile } = useOwnProfile();
@@ -13,22 +14,25 @@ export const WidgetColumn: FC = () => {
 
     if(profile) {
         return (
-            <Card className={styles.container}>
-                <Flex align="center" vertical gap={16}>
-                    <ProfileAvatar profile={profile} version={0} size={64} />
-                    <Typography.Title level={3}>{profile.first_name} {profile.last_name}</Typography.Title>
-                    <Button
-                        type="primary"
-                        size="large"
-                        block
-                        onClick={() => navigate(`/profile/${profile?.id}`)}
-                    >Create a post</Button>
-                </Flex>
-            </Card>
+            <StickySidebar>
+                <Card className={styles.container}>
+                    <Flex align="center" vertical gap={16}>
+                        <ProfileAvatar profile={profile} version={0} size={64} />
+                        <Typography.Title level={3}>{profile.first_name} {profile.last_name}</Typography.Title>
+                        <Button
+                            type="primary"
+                            size="large"
+                            block
+                            onClick={() => navigate(`/profile/${profile?.id}`)}
+                        >Create a post</Button>
+                    </Flex>
+                </Card>
+            </StickySidebar>
         )
     }
 
     return (
+        <StickySidebar>
         <Card className={styles.container}>
             <Flex align="center" vertical gap={16}>
                 <Typography.Title level={3}>New to UniHub?</Typography.Title>
@@ -40,5 +44,6 @@ export const WidgetColumn: FC = () => {
                 >Create an account now!</Button>
             </Flex>
         </Card>
+        </StickySidebar>
     )
 }

@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useState, useEffect} from "react";
 import styles from './ProfilePage.module.css';
 import {ProfileFeedColumn} from "./components/ProfileFeedColumn/ProfileFeedColumn.tsx";
 import {
@@ -15,6 +15,9 @@ import {useProfileEvents} from "../../queries/useProfileEvents.ts";
 import {useOwnProfile} from "../../stores/OwnProfileStore.ts";
 
 export const ProfilePage: FC = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const { profileId } = useParams();
     const { data: profile, refetch } = useProfileById(profileId!);
     const { profile: ownProfile } = useOwnProfile();

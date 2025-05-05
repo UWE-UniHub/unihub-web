@@ -1,8 +1,5 @@
 .container {
     height: fit-content;
-    position: sticky;
-    top: 100px;
-    align-self: flex-start;
 }
 .container:hover {
     background-color: #f9f9f9;

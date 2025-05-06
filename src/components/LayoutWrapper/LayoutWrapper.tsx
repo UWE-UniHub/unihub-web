@@ -9,6 +9,8 @@ import {AuthModal, AuthModalState} from "../AuthModal/AuthModal.tsx";
 import {AuthModalProvider} from "./useAuthModal.ts";
 import {authDelete} from "../../api/auth/authDelete.ts";
 import {ProfileAvatar} from "../ProfileAvatar/ProfileAvatar.tsx";
+import { ScrollToTop } from "../ScrollToTop/ScrollToTop";
+import {SearchBar} from "../SearchBar/SearchBar.tsx";
 
 export const LayoutWrapper: FC = () => {
     const { token } = theme.useToken();
@@ -52,6 +54,7 @@ export const LayoutWrapper: FC = () => {
     }), [profile, checkAuth]);
 
     return (
+        <>
         <Layout className={styles.layout}>
             <Layout.Header>
                 <Flex align="center" justify="space-between" className={styles.layoutHeader}>
@@ -80,48 +83,51 @@ export const LayoutWrapper: FC = () => {
                             ]}
                         />
                     </Flex>
-                    {profile ? (
-                        <Popover
-                            trigger="click"
-                            placement="bottom"
-                            styles={{ body: { padding: 8, overflow: 'hidden' } }}
-                            content={(
-                                <Flex vertical gap={6}>
-                                    <Link to={`/profile/${profile.id}`}>
+                    <Flex align="center" gap={16}>
+                        <SearchBar />
+                        {profile ? (
+                            <Popover
+                                trigger="click"
+                                placement="bottom"
+                                styles={{ body: { padding: 8, overflow: 'hidden' } }}
+                                content={(
+                                    <Flex vertical gap={6}>
+                                        <Link to={`/profile/${profile.id}`}>
+                                            <Button
+                                                type="text"
+                                                icon={<UserOutlined />}
+                                            >Profile</Button>
+                                        </Link>
                                         <Button
-                                            type="text"
-                                            icon={<UserOutlined />}
-                                        >Profile</Button>
-                                    </Link>
-                                    <Button
-                                        type="primary"
-                                        danger
-                                        block
-                                        icon={<LogoutOutlined />}
-                                        onClick={handleLogout}
-                                    >Log out</Button>
-                                </Flex>
-                            )}
-                        >
-                            <Button type="text">
-                                <Flex align="center" gap={8}>
-                                    <ProfileAvatar profile={profile} version={avatarVersion} />
-                                    <Typography.Text style={{ color: token.colorTextLightSolid }}>
-                                        {profile.first_name} {profile.last_name}
-                                    </Typography.Text>
-                                </Flex>
+                                            type="primary"
+                                            danger
+                                            block
+                                            icon={<LogoutOutlined />}
+                                            onClick={handleLogout}
+                                        >Log out</Button>
+                                    </Flex>
+                                )}
+                            >
+                                <Button type="text">
+                                    <Flex align="center" gap={8}>
+                                        <ProfileAvatar profile={profile} version={avatarVersion} />
+                                        <Typography.Text style={{ color: token.colorTextLightSolid }}>
+                                            {profile.first_name} {profile.last_name}
+                                        </Typography.Text>
+                                    </Flex>
+                                </Button>
+                            </Popover>
+                        ) : (
+                            <Button
+                                type="primary"
+                                size="large"
+                                icon={<LoginOutlined />}
+                                onClick={() => setAuthModalState('login')}
+                            >
+                                Login
                             </Button>
-                        </Popover>
-                    ) : (
-                        <Button
-                            type="primary"
-                            size="large"
-                            icon={<LoginOutlined />}
-                            onClick={() => setAuthModalState('login')}
-                        >
-                            Login
-                        </Button>
-                    )}
+                        )}
+                    </Flex>
                 </Flex>
             </Layout.Header>
             <Layout.Content className={styles.content}>
@@ -134,5 +140,7 @@ export const LayoutWrapper: FC = () => {
                 </AuthModalProvider>
             </Layout.Content>
         </Layout>
-    )
+        <ScrollToTop />
+    </>
+    );
 }

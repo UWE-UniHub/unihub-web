@@ -77,5 +77,5 @@ export const ProfilePage: FC = () => {
                 onClose={() => setSubscriptionsOpen(false)}
             />
         </div>
-    )
+    );
 }

@@ -19,6 +19,7 @@ type Props = {
 
 export const SubscribeButton: FC<Props> = ({ type, id, subscribed, onUpdate }) => {
     const { profile } = useOwnProfile();
+
     const { openModal } = useAuthModal();
     const { message } = App.useApp();
     const [loading, setLoading] = useState(false);
@@ -57,6 +58,12 @@ export const SubscribeButton: FC<Props> = ({ type, id, subscribed, onUpdate }) =
             console.error(e);
             void message.error(`Error (${JSON.stringify(e)})`);
         }).finally(() => setLoading(false));
+    }
+
+    const isOwnProfile = type === 'profile' && profile?.id === id;
+
+    if (isOwnProfile) {
+        return null;
     }
 
     if(subscribed) {

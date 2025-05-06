@@ -7,7 +7,7 @@ type Props = {
     posts: (PostCommunity | PostProfile)[];
     loading: boolean;
     onScroll: VoidFunction;
-    onLikesUpdate: (postId: string, likes: number) => void;
+    onLikesUpdate: (postId: string, likes: number, is_liked: boolean) => void;
 }
 
 export const PostsFeed: FC<Props> = ({ posts, loading, onScroll, onLikesUpdate }) => {

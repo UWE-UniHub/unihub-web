@@ -1,0 +1,31 @@
+.upButton {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 100vh;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    border: none;
+    outline: none; 
+    box-shadow: none; 
+    z-index: 999;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 20px;
+}
+  
+.upButton:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.upText {
+    transition: color 0.3s ease;
+}
+  
+.upButton:hover .upText {
+    /*noinspection CssUnresolvedCustomProperty*/
+    color: var(--ant-color-text-secondary);
+}

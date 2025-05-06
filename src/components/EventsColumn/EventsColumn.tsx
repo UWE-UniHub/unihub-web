@@ -5,16 +5,16 @@ import {EventCard} from "../EventCard/EventCard.tsx";
 import {EventModal} from "../EventModal/EventModal.tsx";
 import {useSearchParams} from "react-router";
 import {CreateEventModal} from "../CreateEventModal/CreateEventModal.tsx";
-import {isProfileEvent} from "../../utils/eventGuards.ts";
 
 type Props = {
     id: string;
+    type: 'profile' | 'community';
     events: (EventCommunity | EventProfile)[];
     eventsCreatable: boolean;
     onCreate: VoidFunction;
 }
 
-export const EventsColumn: FC<Props> = ({ id, events, eventsCreatable, onCreate }) => {
+export const EventsColumn: FC<Props> = ({ id, type, events, eventsCreatable, onCreate }) => {
     const [searchParams] = useSearchParams();
     const [eventModal, setEventModal] = useState<EventCommunity | EventProfile>();
 
@@ -30,7 +30,7 @@ export const EventsColumn: FC<Props> = ({ id, events, eventsCreatable, onCreate 
                 <Typography.Title level={4}>Events</Typography.Title>
                 {eventsCreatable && (
                     <CreateEventModal
-                        type={events[0] && isProfileEvent(events[0]) ? 'profile' : 'community'}
+                        type={type}
                         id={id}
                         onCreate={onCreate}
                     />

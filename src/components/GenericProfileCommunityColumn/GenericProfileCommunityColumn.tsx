@@ -6,6 +6,7 @@ import {ProfileTypeCards} from "./components/ProfileTypeCards/ProfileTypeCards.t
 import {EventCommunity, EventProfile} from "../../types/domain.ts";
 import {EventsColumn} from "../EventsColumn/EventsColumn.tsx";
 import styles from './GenericProfileCommunityColumn.module.css';
+import { StickySidebar } from "../StickySidebar/StickySidebar.tsx";
 
 type Props = GenericProfileCommunityProps & {
     events: (EventProfile | EventCommunity)[];
@@ -35,11 +36,13 @@ export const GenericProfileCommunityColumn: FC<Props> = (props) => (
             />
         )}
         {isGenericProfileProps(props) && <ProfileTypeCards profile={props.profile} />}
-        <EventsColumn
-            id={isGenericProfileProps(props) ? props.profile.id : props.community.id}
-            events={props.events}
-            eventsCreatable={props.eventsCreatable}
-            onCreate={props.onEventCreate}
-        />
+        <StickySidebar>
+            <EventsColumn
+                id={isGenericProfileProps(props) ? props.profile.id : props.community.id}
+                events={props.events}
+                eventsCreatable={props.eventsCreatable}
+                onCreate={props.onEventCreate}
+            />
+        </StickySidebar>
     </Flex>
 )

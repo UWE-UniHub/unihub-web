@@ -11,7 +11,7 @@ import {postsPostIdLikesDelete} from "../../../../api/posts/postsPostIdLikesDele
 
 type Props = {
     post: PostProfile | PostCommunity;
-    onLikesUpdate: (likes: number) => void;
+    onLikesUpdate: (likes: number, is_liked: boolean) => void;
 }
 
 export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
@@ -21,7 +21,7 @@ export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
     const handleLike: ButtonProps['onClick'] = (e) => {
         e.stopPropagation();
         postsPostIdLikesPost(post.id).then(() => {
-            onLikesUpdate(post.likes + 1);
+            onLikesUpdate(post.likes + 1, true);
             void refetch();
         }).catch((e) => {
             console.error(e);
@@ -32,7 +32,7 @@ export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
     const handleUnlike: ButtonProps['onClick'] = (e) => {
         e.stopPropagation();
         postsPostIdLikesDelete(post.id).then(() => {
-            onLikesUpdate(post.likes - 1);
+            onLikesUpdate(post.likes - 1, false);
             void refetch();
         }).catch((e) => {
             console.error(e);

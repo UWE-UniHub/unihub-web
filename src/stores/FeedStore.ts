@@ -8,7 +8,7 @@ type FeedKey = "main" | `profile-${string}` | `community-${string}`;
 type FeedStoreType = {
     feeds: Record<FeedKey, { posts: PostType[]; next: number; count: number; init: boolean; }>;
     addPosts: (feedKey: FeedKey, posts: PostType[], next: number, count: number) => void;
-    updateLikes: (feedKey: FeedKey, postId: string, likes: number) => void;
+    updateLikes: (feedKey: FeedKey, postId: string, likes: number, is_liked: boolean) => void;
     flushPosts: (feedKey: FeedKey) => void;
 };
 
@@ -35,14 +35,14 @@ export const useFeedStore = create<FeedStoreType>((set) => ({
             },
         };
     }),
-    updateLikes: (feedKey, postId, likes) => set((state) => {
+    updateLikes: (feedKey, postId, likes, is_liked) => set((state) => {
         const feed = state.feeds[feedKey] || { posts: [], next: 0 };
         return {
             feeds: {
                 ...state.feeds,
                 [feedKey]: {
                     posts: feed.posts.map(post =>
-                        post.id === postId ? { ...post, likes } : post
+                        post.id === postId ? { ...post, likes, is_liked } : post
                     ),
                     next: feed.next,
                     count: feed.count,

@@ -1,0 +1,7 @@
+.sticky {
+    position: sticky;
+    top: 16px;
+    align-self: flex-start;
+    z-index: 2;
+}
+  

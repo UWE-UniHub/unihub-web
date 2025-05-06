@@ -18,10 +18,15 @@ export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
     const { message } = App.useApp();
     const { data: likes, refetch } = usePostLikes(post.id);
 
+    const [isLiked, setIsLiked] = useState(post.is_liked);
+    const [likesCount, setLikesCount] = useState(post.likes);
+
+
     const handleLike: ButtonProps['onClick'] = (e) => {
         e.stopPropagation();
         postsPostIdLikesPost(post.id).then(() => {
-            onLikesUpdate(post.likes + 1);
+            setIsLiked(true);
+            setLikesCount((prev) => prev + 1);
             void refetch();
         }).catch((e) => {
             console.error(e);
@@ -32,7 +37,8 @@ export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
     const handleUnlike: ButtonProps['onClick'] = (e) => {
         e.stopPropagation();
         postsPostIdLikesDelete(post.id).then(() => {
-            onLikesUpdate(post.likes - 1);
+            setIsLiked(false);
+            setLikesCount((prev) => Math.max(prev - 1, 0));
             void refetch();
         }).catch((e) => {
             console.error(e);
@@ -62,19 +68,18 @@ export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
                 open={popoverOpen}
                 onOpenChange={setPopoverOpen}
             >
-                {post.is_liked && (
+                {isLiked ? (
                     <Button
                         type="text"
                         icon={<LikeOutlined />}
                         onClick={handleUnlike}
-                    >Unlike ({post.likes})</Button>
-                )}
-                {!post.is_liked && (
+                    >Unlike ({likesCount})</Button>
+                ) : (
                     <Button
                         type="link"
                         icon={<LikeOutlined />}
                         onClick={handleLike}
-                    >Like ({post.likes})</Button>
+                    >Like ({likesCount})</Button>
                 )}
             </Popover>
             <ProfilesListModal

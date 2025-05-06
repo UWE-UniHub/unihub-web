@@ -46,12 +46,6 @@ export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
         }
     }, [feed.init, initFeed]);
 
-    if(!feed.posts.length) {
-        return (
-            <EmptyFeed />
-        );
-    }
-
     return (
         <Flex vertical gap={16}>
             <Typography.Title level={3}>Publications</Typography.Title>
@@ -62,12 +56,14 @@ export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
                     onPost={initFeed}
                 />
             )}
-            <PostsFeed
-                posts={feed.posts}
-                loading={loading}
-                onScroll={loadPosts}
-                onLikesUpdate={updateLikes}
-            />
+            {feed.posts.length ? (
+                <PostsFeed
+                    posts={feed.posts}
+                    loading={loading}
+                    onScroll={loadPosts}
+                    onLikesUpdate={updateLikes}
+                />
+            ) : <EmptyFeed />}
         </Flex>
     )
 }

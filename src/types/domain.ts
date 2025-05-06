@@ -124,6 +124,8 @@ export type PostCommunity = PostGeneric & {
 
 export interface GenericFeed {
   count: number;
+  total_pages: number;
+  current_page: number;
   next_page: number;
   previous_page: number;
 }
@@ -138,6 +140,10 @@ export type FeedProfile = GenericFeed & {
 
 export type FeedCommunity = GenericFeed & {
   results: PostCommunity[];
+};
+
+export type FeedComments = GenericFeed & {
+  results: Comment[];
 };
 
 export interface PostPost {
@@ -155,6 +161,23 @@ export interface PostPatch {
   hidden?: boolean;
   /** Comma-separated string */
   tags?: string | null;
+}
+
+export interface Comment {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  post: string;
+  author: Profile;
+  content: string;
+  /** @format date-time */
+  created_at: string;
+  /** @format date-time */
+  updated_at: string;
+}
+
+export interface CommentCreate {
+  content: string;
 }
 
 export interface EventGeneric {

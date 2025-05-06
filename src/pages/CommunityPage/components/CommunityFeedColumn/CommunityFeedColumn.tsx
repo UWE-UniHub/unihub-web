@@ -41,16 +41,10 @@ export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
     }
 
     useEffect(() => {
-        if(!feed.posts.length) {
+        if(!feed.init) {
             initFeed();
         }
-    }, [initFeed, feed]);
-
-    if(!feed.posts.length) {
-        return (
-            <EmptyFeed />
-        );
-    }
+    }, [feed.init, initFeed]);
 
     return (
         <Flex vertical gap={16}>
@@ -62,12 +56,14 @@ export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
                     onPost={initFeed}
                 />
             )}
-            <PostsFeed
-                posts={feed.posts}
-                loading={loading}
-                onScroll={loadPosts}
-                onLikesUpdate={updateLikes}
-            />
+            {feed.posts.length ? (
+                <PostsFeed
+                    posts={feed.posts}
+                    loading={loading}
+                    onScroll={loadPosts}
+                    onLikesUpdate={updateLikes}
+                />
+            ) : <EmptyFeed />}
         </Flex>
     )
 }

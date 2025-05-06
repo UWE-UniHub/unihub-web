@@ -1,7 +1,19 @@
 import {FC} from "react";
-import {Result} from "antd";
+import {Empty, Result} from "antd";
 
-export const EmptyFeed: FC = () => {
+type Props = {
+    comments?: boolean;
+}
+
+export const EmptyFeed: FC<Props> = ({ comments }) => {
+    if(comments) {
+        return (
+            <Empty
+                description="No comments here yet!"
+            />
+        )
+    }
+
     return (
         <Result
             status="404"

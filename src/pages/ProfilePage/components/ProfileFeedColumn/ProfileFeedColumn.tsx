@@ -20,6 +20,7 @@ export const ProfileFeedColumn: FC<Props> = ({ profile, events }) => {
     const { profile: ownProfile } = useOwnProfile();
 
     const initFeed = () => {
+        if(loading) return;
         setTimeout(() => {
             setLoading(true);
             profilesProfileIdPostsGet(profile.id).then((f) => {
@@ -29,7 +30,7 @@ export const ProfileFeedColumn: FC<Props> = ({ profile, events }) => {
                 console.error(e);
                 void message.error(`Error loading the feed (${JSON.stringify(e)})`);
             }).finally(() => setLoading(false));
-        })
+        },2000)
     }
 
     const loadPosts = () => {
@@ -52,7 +53,17 @@ export const ProfileFeedColumn: FC<Props> = ({ profile, events }) => {
 
     if(!feed.posts.length) {
         return (
+            <Flex vertical gap={16}>
+            <Typography.Title level={3}>Publications</Typography.Title>
+            {ownProfile?.id === profile.id && (
+                <PostEditor
+                    target={profile}
+                    events={events}
+                    onPost={initFeed}
+                />
+            )}
             <EmptyFeed />
+            </Flex>
         );
     }
 

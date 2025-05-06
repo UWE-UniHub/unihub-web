@@ -23,7 +23,7 @@ export const FeedColumn: FC = () => {
     }
 
     useEffect(() => {
-        if(!feed.next) {
+        if(!feed.init) {
             setLoading(true);
             feedGet().then((f) => {
                 addPosts(f.results, f.next_page, f.count);
@@ -32,7 +32,7 @@ export const FeedColumn: FC = () => {
                 void message.error(`Error loading the feed (${JSON.stringify(e)})`);
             }).finally(() => setLoading(false))
         }
-    }, [feed]);
+    }, [feed.init]);
 
     if(!feed.posts.length) {
         return (

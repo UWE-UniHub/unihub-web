@@ -37,6 +37,7 @@ export const GenericProfileCommunityColumn: FC<Props> = (props) => (
         {isGenericProfileProps(props) && <ProfileTypeCards profile={props.profile} />}
         <EventsColumn
             id={isGenericProfileProps(props) ? props.profile.id : props.community.id}
+            type={isGenericProfileProps(props) ? 'profile' : 'community'}
             events={props.events}
             eventsCreatable={props.eventsCreatable}
             onCreate={props.onEventCreate}

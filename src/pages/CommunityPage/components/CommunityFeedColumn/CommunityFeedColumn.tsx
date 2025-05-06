@@ -41,10 +41,10 @@ export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
     }
 
     useEffect(() => {
-        if(!feed.posts.length) {
+        if(!feed.init) {
             initFeed();
         }
-    }, [initFeed, feed]);
+    }, [feed.init, initFeed]);
 
     if(!feed.posts.length) {
         return (

@@ -17,24 +17,29 @@ import {postsPostIdImgPut} from "../../api/posts/postsPostIdImgPut.ts";
 import {EventPreview} from "../EventPreview/EventPreview.tsx";
 import {TagsPopover} from "./components/TagsPopover/TagsPopover.tsx";
 import { Image } from 'antd';
+import {postsPostIdCommentsPost} from "../../api/posts/postsPostIdCommentsPost.ts";
+import {useOwnProfile} from "../../stores/OwnProfileStore.ts";
 
 type Props = {
-    target: Community | Profile;
+    target: Community | Profile | string; // string - postId
     events: (EventProfile | EventCommunity)[];
     onPost: VoidFunction;
 }
 
-const getTextareaRows = (image: RcFile | undefined, eventId: string | undefined) => {
-    let initial = 8;
-    if(image) initial += 5;
-    if(eventId) initial += 3;
-    return initial;
+const getMethod = (target: Community | Profile | string) => {
+    if(typeof target === 'string') return postsPostIdCommentsPost;
+    if(isProfileTarget(target)) return profilesProfileIdPostsPost;
+    return communitiesCommunityIdPostsPost;
 }
 
 export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
     const { message } = App.useApp();
     const [focused, setFocused] = useState(false);
     const textareaRef = useRef<TextAreaRef>(null);
+
+    const { profile: ownProfile } = useOwnProfile();
+
+    const isComment = typeof target === 'string';
 
     const handleFocus = () => {
         setFocused(true);
@@ -69,17 +74,14 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            const p = await (isProfileTarget(target) ?
-                profilesProfileIdPostsPost :
-                communitiesCommunityIdPostsPost
-            )(target.id, {
+            const p = await (getMethod(target))(isComment ? target : target.id, {
                 content,
                 event_id: eventId || null,
                 hidden,
                 tags: tags || null
             });
 
-            if(image) {
+            if(!isComment && image) {
                 await postsPostIdImgPut(p.id, image);
             }
 
@@ -99,11 +101,12 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
         <Flex align="flex-start" gap={16}>
             {isProfileTarget(target) && <ProfileAvatar profile={target} version={0} />}
             {isCommunityTarget(target) && <CommunityAvatar community={target} version={0} />}
+            {isComment && <ProfileAvatar profile={ownProfile!} version={0} />}
             {focused ? (
                 <div className={styles.textareaContainer}>
                     <Input.TextArea
-                        rows={getTextareaRows(image, eventId)}
-                        placeholder="Share something..."
+                        rows={isComment ? 5 : 8}
+                        placeholder={isComment ? 'Comment something...' : "Share something..."}
                         ref={textareaRef}
                         value={content}
                         onChange={({ target }) => setContent(target.value)}
@@ -117,25 +120,26 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
                                 preview={{ mask: null}}
                             />
                         )}
-
                         {eventId && <EventPreview event={events.find((event) => event.id === eventId)!} />}
                         <Flex align="center" justify="space-between">
-                            <Flex align="center" gap={8}>
-                                <AddImagePopover image={image} setImage={handleImageUpload} />
-                                <AddEventPopover
-                                    events={events}
-                                    eventId={eventId}
-                                    setEventId={setEventId}
-                                />
-                                <TagsPopover
-                                    value={tags}
-                                    onChange={setTags}
-                                />
-                                <Checkbox
-                                    checked={hidden}
-                                    onChange={({ target }) => setHidden(target.checked)}
-                                >Only for subscribers</Checkbox>
-                            </Flex>
+                            {!isComment ? (
+                                <Flex align="center" gap={8}>
+                                    <AddImagePopover image={image} setImage={handleImageUpload} />
+                                    <AddEventPopover
+                                        events={events}
+                                        eventId={eventId}
+                                        setEventId={setEventId}
+                                    />
+                                    <TagsPopover
+                                        value={tags}
+                                        onChange={setTags}
+                                    />
+                                    <Checkbox
+                                        checked={hidden}
+                                        onChange={({ target }) => setHidden(target.checked)}
+                                    >Only for subscribers</Checkbox>
+                                </Flex>
+                            ) : <div />}
                             <Flex align="center" gap={8}>
                                 <Button
                                     disabled={loading}

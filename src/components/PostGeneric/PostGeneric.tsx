@@ -15,7 +15,7 @@ import {capitalizeFirstLetter} from "../../utils/capitalizeFirstLetter.ts";
 type Props = {
     post: PostProfile | PostCommunity;
     fullPage?: boolean;
-    onLikesUpdate: (postId: string, likes: number) => void;
+    onLikesUpdate: (postId: string, likes: number, is_liked: boolean) => void;
 }
 
 export const PostGeneric: FC<Props> = ({ post, fullPage, onLikesUpdate }) => {
@@ -55,7 +55,7 @@ export const PostGeneric: FC<Props> = ({ post, fullPage, onLikesUpdate }) => {
                     </Typography.Text>
                 )}
                 <Divider className={styles.divider} />
-                <PostActions post={post} onLikesUpdate={(likes) => onLikesUpdate(post.id, likes)} />
+                <PostActions post={post} onLikesUpdate={(likes, is_liked) => onLikesUpdate(post.id, likes, is_liked)} />
             </Flex>
         </Card>
     )

@@ -11,10 +11,9 @@ import {postsPostIdLikesDelete} from "../../../../api/posts/postsPostIdLikesDele
 
 type Props = {
     post: PostProfile | PostCommunity;
-    onLikesUpdate: (likes: number) => void;
 }
 
-export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
+export const PostActions: FC<Props> = ({ post }) => {
     const { message } = App.useApp();
     const { data: likes, refetch } = usePostLikes(post.id);
 

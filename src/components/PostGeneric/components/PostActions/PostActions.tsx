@@ -8,6 +8,7 @@ import {ProfileAvatar} from "../../../ProfileAvatar/ProfileAvatar.tsx";
 import {ProfilesListModal} from "../../../ProfilesListModal/ProfilesListModal.tsx";
 import {postsPostIdLikesPost} from "../../../../api/posts/postsPostIdLikesPost.ts";
 import {postsPostIdLikesDelete} from "../../../../api/posts/postsPostIdLikesDelete.ts";
+import { useOwnProfile } from "../../../../stores/OwnProfileStore.ts";
 
 type Props = {
     post: PostProfile | PostCommunity;
@@ -17,6 +18,9 @@ type Props = {
 export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
     const { message } = App.useApp();
     const { data: likes, refetch } = usePostLikes(post.id);
+
+    const { profile: ownProfile } = useOwnProfile();
+    const isLiked = !!likes?.some((like) => like.id === ownProfile?.id);
 
     const handleLike: ButtonProps['onClick'] = (e) => {
         e.stopPropagation();
@@ -62,19 +66,18 @@ export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
                 open={popoverOpen}
                 onOpenChange={setPopoverOpen}
             >
-                {post.is_liked && (
+                {isLiked ? (
                     <Button
                         type="text"
                         icon={<LikeOutlined />}
                         onClick={handleUnlike}
-                    >Unlike ({post.likes})</Button>
-                )}
-                {!post.is_liked && (
+                    >Unlike ({likes?.length ?? 0})</Button>
+                ):(
                     <Button
                         type="link"
                         icon={<LikeOutlined />}
                         onClick={handleLike}
-                    >Like ({post.likes})</Button>
+                    >Like ({likes?.length ?? 0})</Button>
                 )}
             </Popover>
             <ProfilesListModal

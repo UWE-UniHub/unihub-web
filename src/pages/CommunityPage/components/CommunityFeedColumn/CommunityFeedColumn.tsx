@@ -18,14 +18,17 @@ export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
     const [loading, setLoading] = useState(false);
 
     const initFeed = () => {
-        setLoading(true);
-        communitiesCommunityIdPostsGet(community.id).then((f) => {
-            flushPosts();
-            addPosts(f.results, f.next_page, f.count);
-        }).catch((e) => {
-            console.error(e);
-            void message.error(`Error loading the feed (${JSON.stringify(e)})`);
-        }).finally(() => setLoading(false));
+        if(loading) return;
+        setTimeout(() => {
+            setLoading(true);
+            communitiesCommunityIdPostsGet(community.id).then((f) => {
+                flushPosts();
+                addPosts(f.results, f.next_page, f.count);
+            }).catch((e) => {
+                console.error(e);
+                void message.error(`Error loading the feed (${JSON.stringify(e)})`);
+            }).finally(() => setLoading(false));
+        },2000)
     }
 
     const loadPosts = () => {
@@ -48,7 +51,17 @@ export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
 
     if(!feed.posts.length) {
         return (
+            <Flex vertical gap={16}>
+            <Typography.Title level={3}>Publications</Typography.Title>
+            {community.is_admin && (
+                <PostEditor
+                    target={community}
+                    events={events}
+                    onPost={initFeed}
+                />
+            )}
             <EmptyFeed />
+            </Flex>
         );
     }
 

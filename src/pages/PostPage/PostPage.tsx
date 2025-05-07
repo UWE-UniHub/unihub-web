@@ -9,11 +9,15 @@ import {PostProfileCard} from "./components/PostProfileCard/PostProfileCard.tsx"
 import {PostCommunityCard} from "./components/PostCommunityCard/PostCommunityCard.tsx";
 import {MorePostsColumn} from "./components/MorePostsColumn/MorePostsColumn.tsx";
 import {CommentsFeed} from "../../components/CommentsFeed/CommentsFeed.tsx";
+import {useProfileEvents} from "../../queries/useProfileEvents.ts";
+import {useCommunityEvents} from "../../queries/useCommunityEvents.ts";
 
 export const PostPage: FC = () => {
     const { postId, profileId, communityId } = useParams();
 
     const { data: post, refetch } = usePost(postId!);
+    const { data: eventsProfile } = useProfileEvents(profileId);
+    const { data: eventsCommunity } = useCommunityEvents(communityId);
 
     if(!post) {
         return <Spin fullscreen />
@@ -31,7 +35,14 @@ export const PostPage: FC = () => {
         <div className={styles.container}>
             <Flex vertical gap={16} className={styles.postContainer}>
                 <div className={styles.postContainerInner}>
-                    <PostGeneric post={post} onLikesUpdate={() => refetch()} fullPage />
+                    <PostGeneric
+                        post={post}
+                        events={eventsProfile || eventsCommunity || []}
+                        onLikesUpdate={() => refetch()}
+                        fullPage
+                        onPostDelete={() => refetch()}
+                        onPostEdit={() => refetch()}
+                    />
                 </div>
                 <CommentsFeed postId={post.id} />
             </Flex>

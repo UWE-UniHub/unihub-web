@@ -1,12 +1,12 @@
-import {FC, useRef, useState} from "react";
-import {Community, EventCommunity, EventProfile, Profile} from "../../types/domain.ts";
+import {FC, useEffect, useRef, useState} from "react";
+import {Comment, Community, EventCommunity, EventProfile, PostGeneric, Profile} from "../../types/domain.ts";
 import {App, Button, Checkbox, Flex, Input} from "antd";
 import {isCommunityTarget, isProfileTarget} from "./utils.ts";
 import {ProfileAvatar} from "../ProfileAvatar/ProfileAvatar.tsx";
 import {CommunityAvatar} from "../CommunityAvatar/CommunityAvatar.tsx";
 import {TextAreaRef} from "antd/es/input/TextArea";
 import styles from './PostEditor.module.css';
-import {SendOutlined} from "@ant-design/icons";
+import {SaveOutlined, SendOutlined} from "@ant-design/icons";
 import {AddImagePopover} from "./components/AddImagePopover/AddImagePopover.tsx";
 import {RcFile} from "antd/es/upload";
 import {getBase64Upload} from "../../utils/getBase64Upload.ts";
@@ -19,20 +19,29 @@ import {TagsPopover} from "./components/TagsPopover/TagsPopover.tsx";
 import { Image } from 'antd';
 import {postsPostIdCommentsPost} from "../../api/posts/postsPostIdCommentsPost.ts";
 import {useOwnProfile} from "../../stores/OwnProfileStore.ts";
+import {postsPostIdCommentsCommentIdPatch} from "../../api/posts/postsPostIdCommentsCommentIdPatch.ts";
+import {postsPostIdPatch} from "../../api/posts/postsPostIdPatch.ts";
+import {getPostImageUrl} from "../../utils/getPostImageUrl.ts";
 
 type Props = {
     target: Community | Profile | string; // string - postId
+    edit?: PostGeneric | Comment;
     events: (EventProfile | EventCommunity)[];
-    onPost: VoidFunction;
+    onPost: (content: PostGeneric | Comment) => void;
+    onCancel?: VoidFunction;
 }
 
-const getMethod = (target: Community | Profile | string) => {
-    if(typeof target === 'string') return postsPostIdCommentsPost;
-    if(isProfileTarget(target)) return profilesProfileIdPostsPost;
-    return communitiesCommunityIdPostsPost;
+const getMethod = (target: Community | Profile | string, editId?: string) => {
+    if(typeof target === 'string') {
+        if(editId) return postsPostIdCommentsCommentIdPatch.bind(undefined, target, editId);
+        return postsPostIdCommentsPost.bind(undefined, target);
+    }
+    if(editId) return postsPostIdPatch.bind(undefined, editId);
+    if(isProfileTarget(target)) return profilesProfileIdPostsPost.bind(undefined, target.id);
+    return communitiesCommunityIdPostsPost.bind(undefined, target.id);
 }
 
-export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
+export const PostEditor: FC<Props> = ({ target, edit, events, onPost, onCancel }) => {
     const { message } = App.useApp();
     const [focused, setFocused] = useState(false);
     const textareaRef = useRef<TextAreaRef>(null);
@@ -46,7 +55,7 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
         setTimeout(() => textareaRef.current?.focus(), 0);
     }
 
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(edit?.content || '');
 
     const [image, setImage] = useState<RcFile>();
     const [imagePreview, setImagePreview] = useState('');
@@ -59,11 +68,29 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
         }
     }
 
-    const [eventId, setEventId] = useState<string | undefined>(undefined);
-    const [hidden, setHidden] = useState(false);
-    const [tags, setTags] = useState<string>();
+    useEffect(() => {
+        if(edit && !isComment) {
+            const url = getPostImageUrl(edit.id);
+            fetch(url).then((r) => r.blob()).then((b) => {
+                setImage({
+                    ...b,
+                    uid: '-1',
+                    lastModifiedDate: new Date(),
+                    lastModified: new Date().getTime(),
+                    name: 'image.png',
+                    webkitRelativePath: ''
+                });
+                setImagePreview(url);
+            })
+        }
+    }, [edit, isComment]);
+
+    const [eventId, setEventId] = useState<string | undefined>(!isComment ? (edit as PostGeneric)?.event?.id : undefined);
+    const [hidden, setHidden] = useState(!isComment ? (edit as PostGeneric)?.hidden || false : false);
+    const [tags, setTags] = useState<string | undefined>(!isComment ? (edit as PostGeneric)?.tags || undefined : undefined);
 
     const handleCancel = () => {
+        onCancel?.();
         setFocused(false);
         setContent('');
         setImage(undefined);
@@ -74,7 +101,7 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            const p = await (getMethod(target))(isComment ? target : target.id, {
+            const p = await (getMethod(target, edit?.id))({
                 content,
                 event_id: eventId || null,
                 hidden,
@@ -86,7 +113,7 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
             }
 
             void message.success('Posted');
-            onPost();
+            onPost(p);
             handleCancel();
         } catch(e) {
             console.error(e);
@@ -95,14 +122,17 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
             setLoading(false);
         }
     }
-    
 
     return (
         <Flex align="flex-start" gap={16}>
-            {isProfileTarget(target) && <ProfileAvatar profile={target} version={0} />}
-            {isCommunityTarget(target) && <CommunityAvatar community={target} version={0} />}
-            {isComment && <ProfileAvatar profile={ownProfile!} version={0} />}
-            {focused ? (
+            {!edit && (
+                <>
+                    {isProfileTarget(target) && <ProfileAvatar profile={target} version={0} />}
+                    {isCommunityTarget(target) && <CommunityAvatar community={target} version={0} />}
+                    {isComment && <ProfileAvatar profile={ownProfile!} version={0} />}
+                </>
+            )}
+            {edit || focused ? (
                 <div className={styles.textareaContainer}>
                     <Input.TextArea
                         rows={isComment ? 5 : 8}
@@ -148,9 +178,9 @@ export const PostEditor: FC<Props> = ({ target, events, onPost }) => {
                                 <Button
                                     loading={loading}
                                     type="primary"
-                                    icon={<SendOutlined />}
+                                    icon={edit ? <SaveOutlined /> : <SendOutlined />}
                                     onClick={handleSubmit}
-                                >Send</Button>
+                                >{edit ? 'Save' : 'Send'}</Button>
                             </Flex>
                         </Flex>
                     </Flex>

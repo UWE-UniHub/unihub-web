@@ -1,16 +1,25 @@
 import { FC, useEffect, useRef } from "react";
-import { PostCommunity, PostProfile } from "../../types/domain.ts";
+import {
+    EventCommunity,
+    EventProfile,
+    PostCommunity,
+    PostGeneric as PostGenericType,
+    PostProfile
+} from "../../types/domain.ts";
 import {Flex, Spin} from "antd";
 import { PostGeneric } from "../PostGeneric/PostGeneric.tsx";
 
 type Props = {
     posts: (PostCommunity | PostProfile)[];
+    events: (EventCommunity | EventProfile)[];
     loading: boolean;
     onScroll: VoidFunction;
     onLikesUpdate: (postId: string, likes: number, is_liked: boolean) => void;
+    onPostEdit: (postId: string, data: PostGenericType) => void;
+    onPostDelete: (postId: string) => void;
 }
 
-export const PostsFeed: FC<Props> = ({ posts, loading, onScroll, onLikesUpdate }) => {
+export const PostsFeed: FC<Props> = ({ posts, events, loading, onScroll, onLikesUpdate, onPostEdit, onPostDelete }) => {
     const observerRef = useRef<IntersectionObserver | null>(null);
     const lastPostRef = useRef<HTMLDivElement | null>(null);
 
@@ -35,7 +44,10 @@ export const PostsFeed: FC<Props> = ({ posts, loading, onScroll, onLikesUpdate }
                 <div key={post.id} ref={index === posts.length - 1 ? lastPostRef : undefined}>
                     <PostGeneric
                         post={post}
+                        events={events}
                         onLikesUpdate={onLikesUpdate}
+                        onPostEdit={onPostEdit}
+                        onPostDelete={onPostDelete}
                     />
                 </div>
             ))}

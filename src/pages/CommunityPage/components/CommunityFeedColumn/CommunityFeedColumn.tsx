@@ -14,7 +14,14 @@ type Props = {
 
 export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
     const { message } = App.useApp();
-    const { feed, addPosts, updateLikes, flushPosts } = useFeed('community', community.id);
+    const {
+        feed,
+        addPosts,
+        updateLikes,
+        updatePost,
+        deletePost,
+        flushPosts
+    } = useFeed('community', community.id);
     const [loading, setLoading] = useState(false);
 
     const initFeed = () => {
@@ -59,9 +66,12 @@ export const CommunityFeedColumn: FC<Props> = ({ community, events }) => {
             {feed.posts.length ? (
                 <PostsFeed
                     posts={feed.posts}
+                    events={events}
                     loading={loading}
                     onScroll={loadPosts}
                     onLikesUpdate={updateLikes}
+                    onPostEdit={updatePost}
+                    onPostDelete={deletePost}
                 />
             ) : <EmptyFeed />}
         </Flex>

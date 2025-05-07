@@ -10,10 +10,18 @@ type Params = {
 export const useSignupHandler = ({ setLoading, onSuccess }: Params): [FormProps<SignupPost>['onFinish']] => {
     const { message } = App.useApp();
 
+    const capitalize = (s: string) =>
+        s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+
     return [
         (values) => {
             setLoading(true);
-            authSignupPost(values).then(() => {
+            const formattedValues = {
+                ...values,
+                first_name: capitalize(values.first_name),
+                last_name: capitalize(values.last_name),
+            };
+            authSignupPost(formattedValues).then(() => {
                 void message.success('Success, you can now login!');
                 onSuccess();
             }).catch((err) => {

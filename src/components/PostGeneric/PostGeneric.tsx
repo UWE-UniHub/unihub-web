@@ -27,14 +27,14 @@ export const PostGeneric: FC<Props> = ({ post, events, fullPage, onLikesUpdate, 
     const navigate = useNavigate();
     const { modal, message } = App.useApp();
 
+    const [editing, setEditing] = useState(false);
+    const handleEdit = () => setEditing(true);
+
     const handlePostClick = () => {
-        if(fullPage) return;
+        if(fullPage || editing) return;
         if(isProfilePost(post)) navigate(`/profile/${post.profile.id}/${post.id}`);
         if(isCommunityPost(post)) navigate(`/community/${post.community.id}/${post.id}`);
     }
-
-    const [editing, setEditing] = useState(false);
-    const handleEdit = () => setEditing(true);
 
     const handleDelete = async () => {
         if(await modal.confirm({ title: 'Are you sure you want to delete this post?' })) {

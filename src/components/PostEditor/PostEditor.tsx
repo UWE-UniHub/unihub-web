@@ -22,6 +22,7 @@ import {useOwnProfile} from "../../stores/OwnProfileStore.ts";
 import {postsPostIdCommentsCommentIdPatch} from "../../api/posts/postsPostIdCommentsCommentIdPatch.ts";
 import {postsPostIdPatch} from "../../api/posts/postsPostIdPatch.ts";
 import {getPostImageUrl} from "../../utils/getPostImageUrl.ts";
+import {postsPostIdImgDelete} from "../../api/posts/postsPostIdImgDelete.ts";
 
 type Props = {
     target: Community | Profile | string; // string - postId
@@ -68,6 +69,7 @@ export const PostEditor: FC<Props> = ({ target, edit, events, onPost, onCancel }
         }
     }
 
+    const [editHadImage, setEditHadImage] = useState(false);
     useEffect(() => {
         if(edit && !isComment) {
             const url = getPostImageUrl(edit.id);
@@ -84,6 +86,7 @@ export const PostEditor: FC<Props> = ({ target, edit, events, onPost, onCancel }
                     webkitRelativePath: ''
                 });
                 setImagePreview(url);
+                setEditHadImage(true);
             })
         }
     }, [edit, isComment]);
@@ -113,6 +116,9 @@ export const PostEditor: FC<Props> = ({ target, edit, events, onPost, onCancel }
 
             if(!isComment && image) {
                 await postsPostIdImgPut(p.id, image);
+            }
+            if(!image && editHadImage) {
+                await postsPostIdImgDelete(p.id);
             }
 
             void message.success('Posted');

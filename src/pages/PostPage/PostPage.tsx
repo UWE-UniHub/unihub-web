@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {Navigate, useParams} from "react-router";
+import {Navigate, useNavigate, useParams} from "react-router";
 import styles from './PostPage.module.css';
 import {PostGeneric} from "../../components/PostGeneric/PostGeneric.tsx";
 import {usePost} from "../../queries/usePost.ts";
@@ -14,6 +14,7 @@ import {useCommunityEvents} from "../../queries/useCommunityEvents.ts";
 
 export const PostPage: FC = () => {
     const { postId, profileId, communityId } = useParams();
+    const navigate = useNavigate();
 
     const { data: post, refetch } = usePost(postId!);
     const { data: eventsProfile } = useProfileEvents(profileId);
@@ -40,7 +41,7 @@ export const PostPage: FC = () => {
                         events={eventsProfile || eventsCommunity || []}
                         onLikesUpdate={() => refetch()}
                         fullPage
-                        onPostDelete={() => refetch()}
+                        onPostDelete={() => navigate('/')}
                         onPostEdit={() => refetch()}
                     />
                 </div>

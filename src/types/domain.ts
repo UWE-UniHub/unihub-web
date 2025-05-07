@@ -76,6 +76,7 @@ export interface Community {
   name: string;
   bio: string | null;
   subscribers: number;
+  tags: string;
 }
 
 export type CommunityDetailed = Community & {
@@ -88,11 +89,13 @@ export interface CommunityPost {
   id: string;
   name: string;
   bio: string | null;
+  tags: string;
 }
 
 export interface CommunityPatch {
   name?: string;
   bio?: string | null;
+  tags?: string;
 }
 
 export interface CommunityAdmins {

@@ -132,7 +132,7 @@ export const SearchBar: FC = () => {
                         className={styles.searchBar}
                         value={value}
                         onChange={handleChange}
-                        onBlur={() => setTimeout(() => setValue(''), 100)}
+                        onBlur={() => setTimeout(() => setValue(''), 500)}
                     />
             </ConfigProvider>
         </Dropdown>

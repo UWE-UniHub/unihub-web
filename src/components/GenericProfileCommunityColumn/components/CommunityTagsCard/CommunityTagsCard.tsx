@@ -18,7 +18,7 @@ export const CommunityTagsCard: FC<Props> = ({ community }) => {
             <Tooltip title={fullInterests.join(', ')}>
                 <Statistic
                     title="Tags"
-                    value={fullInterests.some(v => v) ? `${shortInterests.join(', ')}${moreInterests ? ` and ${moreInterests} more` : ''}` : 'None'}
+                    value={fullInterests.some(v => v) ? `${shortInterests.join(', ')}${moreInterests > 0 ? ` and ${moreInterests} more` : ''}` : 'None'}
                 />
             </Tooltip>
         </Card>

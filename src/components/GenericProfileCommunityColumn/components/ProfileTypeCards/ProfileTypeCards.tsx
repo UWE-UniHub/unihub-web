@@ -52,7 +52,7 @@ export const ProfileTypeCards: FC<Props> = ({ profile }) => {
                     <Tooltip title={fullInterests.join(', ')}>
                         <Statistic
                             title="Interests"
-                            value={fullInterests.some(v => v) ? `${shortInterests.join(', ')}${moreInterests ? ` and ${moreInterests} more` : ''}` : 'None'}
+                            value={fullInterests.some(v => v) ? `${shortInterests.join(', ')}${moreInterests > 0 ? ` and ${moreInterests} more` : ''}` : 'None'}
                         />
                     </Tooltip>
                 </Card>
@@ -107,7 +107,7 @@ export const ProfileTypeCards: FC<Props> = ({ profile }) => {
                 <Tooltip title={fullInterests.join(', ')}>
                     <Statistic
                         title="Interests"
-                        value={fullInterests.some(v => v) ? `${shortInterests.join(', ')}${moreInterests ? ` and ${moreInterests} more` : ''}` : 'None'}
+                        value={fullInterests.some(v => v) ? `${shortInterests.join(', ')}${moreInterests > 0 ? ` and ${moreInterests} more` : ''}` : 'None'}
                     />
                 </Tooltip>
             </Card>

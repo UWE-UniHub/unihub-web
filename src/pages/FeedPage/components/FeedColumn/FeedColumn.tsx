@@ -7,7 +7,13 @@ import {App} from "antd";
 
 export const FeedColumn: FC = () => {
     const { message } = App.useApp();
-    const { feed, addPosts, updateLikes } = useFeed('main');
+    const {
+        feed,
+        addPosts,
+        updateLikes,
+        updatePost,
+        deletePost
+    } = useFeed('main');
     const [loading, setLoading] = useState(false);
 
     const loadPosts = () => {
@@ -46,6 +52,9 @@ export const FeedColumn: FC = () => {
             loading={loading}
             onScroll={loadPosts}
             onLikesUpdate={updateLikes}
+            onPostEdit={updatePost}
+            onPostDelete={deletePost}
+            events={[]}
         />
     )
 }

@@ -13,7 +13,13 @@ type Props = {
 
 export const CommentsFeed: FC<Props> = ({ postId }) => {
     const { message } = App.useApp();
-    const { feed, addComments, flushComments } = useComments(postId);
+    const {
+        feed,
+        addComments,
+        updateComment,
+        deleteComment,
+        flushComments
+    } = useComments(postId);
     const [loading, setLoading] = useState(false);
     const { profile: ownProfile } = useOwnProfile();
 
@@ -59,6 +65,8 @@ export const CommentsFeed: FC<Props> = ({ postId }) => {
                     comments={feed.comments}
                     loading={loading}
                     onScroll={loadComments}
+                    onCommentEdit={updateComment}
+                    onCommentDelete={deleteComment}
                 />
             ) : <EmptyFeed comments />}
         </Flex>

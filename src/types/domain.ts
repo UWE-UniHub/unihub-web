@@ -112,6 +112,7 @@ export interface PostGeneric {
   event?: EventProfile | EventCommunity;
   likes: number;
   is_liked: boolean;
+  is_editable: boolean;
   hidden: boolean;
   /** Comma-separated string */
   tags: string | null;

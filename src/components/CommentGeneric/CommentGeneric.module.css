@@ -2,3 +2,7 @@
     white-space: pre-line;
     margin-bottom: 0 !important;
 }
+
+.editingBody {
+    padding: 0 !important;
+}

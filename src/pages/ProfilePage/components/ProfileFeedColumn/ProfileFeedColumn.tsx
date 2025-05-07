@@ -15,7 +15,14 @@ type Props = {
 
 export const ProfileFeedColumn: FC<Props> = ({ profile, events }) => {
     const { message } = App.useApp();
-    const { feed, addPosts, updateLikes, flushPosts } = useFeed('profile', profile.id);
+    const {
+        feed,
+        addPosts,
+        updateLikes,
+        updatePost,
+        deletePost,
+        flushPosts
+    } = useFeed('profile', profile.id);
     const [loading, setLoading] = useState(false);
     const { profile: ownProfile } = useOwnProfile();
 
@@ -63,9 +70,12 @@ export const ProfileFeedColumn: FC<Props> = ({ profile, events }) => {
             {feed.posts.length ? (
                 <PostsFeed
                     posts={feed.posts}
+                    events={events}
                     loading={loading}
                     onScroll={loadPosts}
                     onLikesUpdate={updateLikes}
+                    onPostEdit={updatePost}
+                    onPostDelete={deletePost}
                 />
             ) : <EmptyFeed />}
         </Flex>

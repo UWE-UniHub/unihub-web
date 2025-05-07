@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import {PostCommunity, PostProfile} from "../types/domain.ts";
+import {PostCommunity, PostGeneric, PostProfile} from "../types/domain.ts";
 
 type PostType = PostCommunity | PostProfile;
 
@@ -9,6 +9,8 @@ type FeedStoreType = {
     feeds: Record<FeedKey, { posts: PostType[]; next: number; count: number; init: boolean; }>;
     addPosts: (feedKey: FeedKey, posts: PostType[], next: number, count: number) => void;
     updateLikes: (feedKey: FeedKey, postId: string, likes: number, is_liked: boolean) => void;
+    updatePost: (feedKey: FeedKey, postId: string, data: PostGeneric) => void;
+    deletePost: (feedKey: FeedKey, postId: string) => void;
     flushPosts: (feedKey: FeedKey) => void;
 };
 
@@ -51,6 +53,36 @@ export const useFeedStore = create<FeedStoreType>((set) => ({
             },
         };
     }),
+    updatePost: (feedKey, postId, data) => set((state) => {
+        const feed = state.feeds[feedKey] || { posts: [], next: 0 };
+        return {
+            feeds: {
+                ...state.feeds,
+                [feedKey]: {
+                    posts: feed.posts.map(post =>
+                        post.id === postId ? data : post
+                    ),
+                    next: feed.next,
+                    count: feed.count,
+                    init: true
+                },
+            },
+        };
+    }),
+    deletePost: (feedKey, postId) => set((state) => {
+        const feed = state.feeds[feedKey] || { posts: [], next: 0 };
+        return {
+            feeds: {
+                ...state.feeds,
+                [feedKey]: {
+                    posts: feed.posts.filter(post => post.id !== postId),
+                    next: feed.next,
+                    count: feed.count,
+                    init: true
+                },
+            },
+        };
+    }),
     flushPosts: (feedKey) => set((state) => ({
         feeds: {
             ...state.feeds,
@@ -61,12 +93,14 @@ export const useFeedStore = create<FeedStoreType>((set) => ({
 
 export const useFeed = (type: "main" | "profile" | "community", id?: string) => {
     const feedKey: FeedKey = type === "main" ? "main" : `${type}-${id}`;
-    const { feeds, addPosts, updateLikes, flushPosts } = useFeedStore();
+    const { feeds, addPosts, updateLikes, updatePost, deletePost, flushPosts } = useFeedStore();
 
     return {
         feed: feeds[feedKey] || { posts: [], next: 0, count: 0, init: false },
         addPosts: addPosts.bind(undefined, feedKey),
         updateLikes: updateLikes.bind(undefined, feedKey),
+        updatePost: updatePost.bind(undefined, feedKey),
+        deletePost: deletePost.bind(undefined, feedKey),
         flushPosts: flushPosts.bind(undefined, feedKey)
     };
 };

@@ -76,7 +76,7 @@ export const CreateEventModal: FC<Props> = ({ type, id, onCreate }) => {
                         label="Date"
                         rules={[{ type: 'date', required: true }]}
                     >
-                        <DatePicker disabledDate={(date) => date && date.isBefore(dayjs())} />
+                        <DatePicker showTime={{ format: 'HH:mm' }} disabledDate={(date) => date && date.isBefore(dayjs())} />
                     </Form.Item>
                     <Form.Item<EventPost>
                         name="required_materials"

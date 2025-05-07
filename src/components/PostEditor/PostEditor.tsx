@@ -71,7 +71,10 @@ export const PostEditor: FC<Props> = ({ target, edit, events, onPost, onCancel }
     useEffect(() => {
         if(edit && !isComment) {
             const url = getPostImageUrl(edit.id);
-            fetch(url).then((r) => r.blob()).then((b) => {
+            fetch(url).then((r) => {
+                if(!r.ok) return Promise.reject();
+                return r.blob();
+            }).then((b) => {
                 setImage({
                     ...b,
                     uid: '-1',

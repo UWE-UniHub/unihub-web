@@ -6,6 +6,7 @@ import {ProfileTypeCards} from "./components/ProfileTypeCards/ProfileTypeCards.t
 import {EventCommunity, EventProfile} from "../../types/domain.ts";
 import {EventsColumn} from "../EventsColumn/EventsColumn.tsx";
 import styles from './GenericProfileCommunityColumn.module.css';
+import {CommunityTagsCard} from "./components/CommunityTagsCard/CommunityTagsCard.tsx";
 
 type Props = GenericProfileCommunityProps & {
     events: (EventProfile | EventCommunity)[];
@@ -35,6 +36,7 @@ export const GenericProfileCommunityColumn: FC<Props> = (props) => (
             />
         )}
         {isGenericProfileProps(props) && <ProfileTypeCards profile={props.profile} />}
+        {isGenericCommunityProps(props) && <CommunityTagsCard community={props.community} />}
         <EventsColumn
             id={isGenericProfileProps(props) ? props.profile.id : props.community.id}
             type={isGenericProfileProps(props) ? 'profile' : 'community'}

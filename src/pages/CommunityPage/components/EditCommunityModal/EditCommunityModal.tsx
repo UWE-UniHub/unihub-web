@@ -9,6 +9,7 @@ import {communitiesCommunityIdDelete} from "../../../../api/communities/communit
 import styles from "./EditCommunityModal.module.css";
 import {AvatarUploadContent} from "../../../../components/AvatarUploadContent/AvatarUploadContent.tsx";
 import {getCommunityAvatarUrl} from "../../../../utils/getCommunityAvatarUrl.ts";
+import {InterestTagsSelect} from "../../../../components/InterestTagsSelect/InterestTagsSelect.tsx";
 
 type Props = {
     community: CommunityDetailed;
@@ -113,7 +114,8 @@ export const EditCommunityModal: FC<Props> = ({ community, open, onClose, onUpda
                 preserve={false}
                 initialValues={{
                     name: community.name,
-                    bio: community.bio
+                    bio: community.bio,
+                    tags: community.tags
                 }}
                 onFinish={handleEdit}
             >
@@ -148,6 +150,12 @@ export const EditCommunityModal: FC<Props> = ({ community, open, onClose, onUpda
                     label="Bio"
                 >
                     <Input.TextArea rows={3} />
+                </Form.Item>
+                <Form.Item<CommunityPatch>
+                    name="tags"
+                    label="Tags"
+                >
+                    <InterestTagsSelect />
                 </Form.Item>
             </Form>
         </Modal>

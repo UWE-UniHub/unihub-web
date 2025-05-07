@@ -198,6 +198,7 @@ export interface EventGeneric {
   max_capacity: number;
   subscribers_count: number;
   is_subscribed: boolean;
+  is_deleteable: boolean;
 }
 
 export type EventProfile = EventGeneric & {

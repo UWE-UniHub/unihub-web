@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
     server: {
       ...(env.VITE_PROXY ? {
         proxy: {
-          ...(env.VITE_PROXY_TARGET ? ({
+          ...(!env.VITE_PROXY_TARGET ? ({
             '/api': {
               target: 'https://uwe.dyzoon.dev',
               changeOrigin: true,

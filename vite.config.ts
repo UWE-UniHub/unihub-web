@@ -7,6 +7,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   return {
     server: {
+      host: true,
       ...(env.VITE_PROXY ? {
         proxy: {
           ...(!env.VITE_PROXY_TARGET ? ({

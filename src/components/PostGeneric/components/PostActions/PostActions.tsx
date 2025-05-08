@@ -8,6 +8,8 @@ import {ProfileAvatar} from "../../../ProfileAvatar/ProfileAvatar.tsx";
 import {ProfilesListModal} from "../../../ProfilesListModal/ProfilesListModal.tsx";
 import {postsPostIdLikesPost} from "../../../../api/posts/postsPostIdLikesPost.ts";
 import {postsPostIdLikesDelete} from "../../../../api/posts/postsPostIdLikesDelete.ts";
+import {useOwnProfile} from "../../../../stores/OwnProfileStore.ts";
+import {useAuthModal} from "../../../LayoutWrapper/useAuthModal.ts";
 
 type Props = {
     post: PostProfile | PostCommunity;
@@ -17,9 +19,16 @@ type Props = {
 export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
     const { message } = App.useApp();
     const { data: likes, refetch } = usePostLikes(post.id);
+    const { profile } = useOwnProfile();
+    const { openModal } = useAuthModal();
 
     const handleLike: ButtonProps['onClick'] = (e) => {
         e.stopPropagation();
+
+        if(!profile) {
+            return openModal('login');
+        }
+
         postsPostIdLikesPost(post.id).then(() => {
             onLikesUpdate(post.likes + 1, true);
             void refetch();
@@ -31,6 +40,11 @@ export const PostActions: FC<Props> = ({ post, onLikesUpdate }) => {
 
     const handleUnlike: ButtonProps['onClick'] = (e) => {
         e.stopPropagation();
+
+        if(!profile) {
+            return openModal('login');
+        }
+
         postsPostIdLikesDelete(post.id).then(() => {
             onLikesUpdate(post.likes - 1, false);
             void refetch();
